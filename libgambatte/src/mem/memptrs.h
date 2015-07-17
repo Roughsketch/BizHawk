@@ -21,12 +21,21 @@
 
 #include "newstate.h"
 
+#include <Windows.h>
+
 namespace gambatte {
 
 enum OamDmaSrc { OAM_DMA_SRC_ROM, OAM_DMA_SRC_SRAM, OAM_DMA_SRC_VRAM,
                  OAM_DMA_SRC_WRAM, OAM_DMA_SRC_INVALID, OAM_DMA_SRC_OFF };
 
+static const TCHAR MAP_NAME[] = TEXT("Global\\libgambatte");
+static const TCHAR MAP_INFO_NAME[] = TEXT("Global\\libgambatte_info");
+
 class MemPtrs {
+	HANDLE m_hMapFile;
+	HANDLE m_hMapFileSize;
+	LPVOID m_lpSize;
+
 	const unsigned char *rmem_[0x10];
 	      unsigned char *wmem_[0x10];
 	

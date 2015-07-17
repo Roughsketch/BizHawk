@@ -25,25 +25,89 @@ namespace gambatte {
 MemPtrs::MemPtrs()
 : rmem_(), wmem_(), romdata_(), wramdata_(), vrambankptr_(0), rsrambankptr_(0),
   wsrambankptr_(0), memchunk_(0), rambankdata_(0), wramdataend_(0), oamDmaSrc_(OAM_DMA_SRC_OFF),
-  memchunk_len(0)
-{
+  memchunk_len(0), m_hMapFile(0)
+{  
 }
 
 MemPtrs::~MemPtrs() {
-	delete []memchunk_;
+	UnmapViewOfFile(memchunk_);
+	CloseHandle(m_hMapFile);
+
+	UnmapViewOfFile(m_lpSize);
+	CloseHandle(m_hMapFileSize);
 }
 
 void MemPtrs::reset(const unsigned rombanks, const unsigned rambanks, const unsigned wrambanks) {
-	delete []memchunk_;
+	//	Get updated length for memchunk_
 	memchunk_len = 0x4000 + rombanks * 0x4000ul + 0x4000 + rambanks * 0x2000ul + wrambanks * 0x1000ul + 0x4000;
-	memchunk_ = new unsigned char[memchunk_len];
 
+	//	If we haven't mapped the file, then map it. Otherwise, zero out the new length to zero.
+	//	As far as I'm aware, even if we specify a lower size than the new size initially it
+	//  should automatically resize the file on disk with the PAGE_READWRITE flag active.
+	if (m_hMapFile == NULL)
+	{
+		//	Create the new mapped file with the initial length
+		m_hMapFile = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, memchunk_len, MAP_NAME);
+
+		if (m_hMapFile == NULL)
+		{
+			wchar_t buffer[256];
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), buffer, 256, NULL);
+			MessageBox(NULL, buffer, L"", 0);
+		}
+
+		//	Assign that mapped file's pointer so we can use it
+		memchunk_ = (unsigned char *)MapViewOfFile(m_hMapFile, FILE_MAP_ALL_ACCESS, 0, 0, memchunk_len);
+
+		if (memchunk_ == NULL)
+		{
+			wchar_t buffer[256];
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), buffer, 256, NULL);
+			MessageBox(NULL, buffer, L"", 0);
+		}
+
+		//	Create another mapped file to store structured information about the first mapped file
+		m_hMapFileSize = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(int), MAP_INFO_NAME);
+
+		if (m_hMapFileSize == NULL)
+		{
+			wchar_t buffer[256];
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), buffer, 256, NULL);
+			MessageBox(NULL, buffer, L"", 0);
+		}
+
+		//	Assign that pointer so we can use it
+		m_lpSize= MapViewOfFile(m_hMapFileSize, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(int));
+
+		if (m_lpSize == NULL)
+		{
+			wchar_t buffer[256];
+			FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), buffer, 256, NULL);
+			MessageBox(NULL, buffer, L"", 0);
+		}
+	}
+	else
+	{
+		//	If we've already made the file, then just zero out the old memory
+		ZeroMemory(memchunk_, memchunk_len);
+	}
+	
+	//	Copy the structured info into the information mapped file
+	CopyMemory((LPVOID)((DWORD)m_lpSize + sizeof(int) * 0), &memchunk_len, sizeof(int));	//	Mapped file length
+	CopyMemory((LPVOID)((DWORD)m_lpSize + sizeof(int) * 1), &rombanks, sizeof(int));		//	How many rom banks
+	CopyMemory((LPVOID)((DWORD)m_lpSize + sizeof(int) * 2), &rambanks, sizeof(int));		//	How many ram banks
+	CopyMemory((LPVOID)((DWORD)m_lpSize + sizeof(int) * 3), &wrambanks, sizeof(int));		//	How many wram banks
+
+
+	//	Rest of unchanged initialization
 	romdata_[0] = romdata();
 	rambankdata_ = romdata_[0] + rombanks * 0x4000ul + 0x4000;
 	wramdata_[0] = rambankdata_ + rambanks * 0x2000ul;
 	wramdataend_ = wramdata_[0] + wrambanks * 0x1000ul;
 
+
 	std::memset(rdisabledRamw(), 0xFF, 0x2000);
+
 	
 	oamDmaSrc_ = OAM_DMA_SRC_OFF;
 	rmem_[0x3] = rmem_[0x2] = rmem_[0x1] = rmem_[0x0] = romdata_[0];
