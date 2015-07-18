@@ -15,7 +15,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -52,14 +52,15 @@ void Mirror8bS (unsigned char * tex, DWORD mask, DWORD max_width, DWORD real_wid
     if (line < 0) return;
     unsigned char * start = tex + (mask_width);
 #if !defined(__GNUC__) && !defined(NO_ASM)
-    __asm {
+    __asm
+    {
         mov edi,dword ptr [start]
 
         mov ecx,dword ptr [height]
-loop_y:
+        loop_y:
 
         xor edx,edx
-loop_x:
+        loop_x:
         mov esi,dword ptr [tex]
         mov ebx,dword ptr [mask_width]
         add ebx,edx
@@ -73,7 +74,7 @@ loop_x:
         mov byte ptr [edi],al
         inc edi
         jmp end_mirror_check
-is_mirrored:
+        is_mirrored:
         add esi,dword ptr [mask_mask]
         mov eax,edx
         and eax,dword ptr [mask_mask]
@@ -81,7 +82,7 @@ is_mirrored:
         mov al,byte ptr [esi]
         mov byte ptr [edi],al
         inc edi
-end_mirror_check:
+        end_mirror_check:
 
         inc edx
         cmp edx,dword ptr [count]
@@ -96,49 +97,49 @@ end_mirror_check:
         jnz loop_y
     }
 #elif !defined(NO_ASM)
-   //printf("Mirror8bS\n");
+    //printf("Mirror8bS\n");
     intptr_t fake_esi,fake_eax;
-   asm volatile (
-         "1:                        \n"  // loop_y3
-         
-         "xor %%edx, %%edx          \n"
-         "2:                        \n"  // loop_x3
-         "mov %[tex], %[S]        \n"
-         "mov %[mask_width], %%eax \n"
-         "add %%edx, %%eax          \n"
-         "and %[mask_width], %%eax \n"
-         "jnz 3f                   \n"  // is_mirrored2
-         
-         "mov %%edx, %%eax          \n"
-         "and %[mask_mask], %[a]    \n"
-         "add %[a], %[S]            \n"
-         "mov (%[S]), %%al          \n"
-         "mov %%al, (%[start])      \n"
-         "inc %[start]              \n"
-         "jmp 4f                    \n"  // end_mirror_check2
-         "3:                        \n"  // is_mirrored2
-         "add %[mask_mask], %[S]    \n"
-         "mov %%edx, %%eax          \n"
-         "and %[mask_mask], %[a]    \n"
-         "sub %[a], %[S]            \n"
-         "mov (%[S]), %%al          \n"
-         "mov %%al, (%[start])      \n"
-         "inc %[start]              \n"
-         "4:                        \n"  // end_mirror_check2
-         
-         "inc %%edx                 \n"
-         "cmp %[count], %%edx       \n"
-         "jne 2b                    \n"  // loop_x3
-         
-         "add %[line], %[start]     \n"
-         "add %[line_full], %[tex]  \n"
-         
-         "dec %%ecx                 \n"
-         "jnz 1b                    \n"  // loop_y3
-         : [S] "=&S" (fake_esi), [a]"=&a"(fake_eax), [start]"+D"(start), "+c"(height), [tex] "+r" (tex)
-         : [mask_width] "g" (mask_width), [mask_mask] "g" ((intptr_t)mask_mask), [count] "g" (count), [line] "g" ((intptr_t)line), [line_full] "g" ((intptr_t)line_full)
-         : "memory", "cc", "edx"
-         );
+    asm volatile (
+        "1:                        \n"  // loop_y3
+
+        "xor %%edx, %%edx          \n"
+        "2:                        \n"  // loop_x3
+        "mov %[tex], %[S]        \n"
+        "mov %[mask_width], %%eax \n"
+        "add %%edx, %%eax          \n"
+        "and %[mask_width], %%eax \n"
+        "jnz 3f                   \n"  // is_mirrored2
+
+        "mov %%edx, %%eax          \n"
+        "and %[mask_mask], %[a]    \n"
+        "add %[a], %[S]            \n"
+        "mov (%[S]), %%al          \n"
+        "mov %%al, (%[start])      \n"
+        "inc %[start]              \n"
+        "jmp 4f                    \n"  // end_mirror_check2
+        "3:                        \n"  // is_mirrored2
+        "add %[mask_mask], %[S]    \n"
+        "mov %%edx, %%eax          \n"
+        "and %[mask_mask], %[a]    \n"
+        "sub %[a], %[S]            \n"
+        "mov (%[S]), %%al          \n"
+        "mov %%al, (%[start])      \n"
+        "inc %[start]              \n"
+        "4:                        \n"  // end_mirror_check2
+
+        "inc %%edx                 \n"
+        "cmp %[count], %%edx       \n"
+        "jne 2b                    \n"  // loop_x3
+
+        "add %[line], %[start]     \n"
+        "add %[line_full], %[tex]  \n"
+
+        "dec %%ecx                 \n"
+        "jnz 1b                    \n"  // loop_y3
+        : [S] "=&S" (fake_esi), [a]"=&a"(fake_eax), [start]"+D"(start), "+c"(height), [tex] "+r" (tex)
+        : [mask_width] "g" (mask_width), [mask_mask] "g" ((intptr_t)mask_mask), [count] "g" (count), [line] "g" ((intptr_t)line), [line_full] "g" ((intptr_t)line_full)
+        : "memory", "cc", "edx"
+    );
 #endif // _WIN32
 }
 
@@ -190,14 +191,15 @@ void Wrap8bS (unsigned char * tex, DWORD mask, DWORD max_width, DWORD real_width
     if (line < 0) return;
     unsigned char * start = tex + (mask_width);
 #if !defined(__GNUC__) && !defined(NO_ASM)
-    __asm {
+    __asm
+    {
         mov edi,dword ptr [start]
 
         mov ecx,dword ptr [height]
-loop_y:
+        loop_y:
 
         xor edx,edx
-loop_x:
+        loop_x:
 
         mov esi,dword ptr [tex]
         mov eax,edx
@@ -221,36 +223,36 @@ loop_x:
         jnz loop_y
     }
 #elif !defined(NO_ASM)
-   //printf("wrap8bS\n");
+    //printf("wrap8bS\n");
     intptr_t fake_esi,fake_eax;
-   asm volatile (
-         "1:                       \n"  // loop_y4
+    asm volatile (
+        "1:                       \n"  // loop_y4
 
-         "xor %%edx, %%edx         \n"
-         "2:                       \n"  // loop_x4
-         
-         "mov %[tex], %[S]       \n"
-         "mov %%edx, %%eax         \n"
-         "and %[mask_mask], %%eax \n"
-         "shl $2, %%eax            \n"
-         "add %[a], %[S]         \n"
-         "mov (%[S]), %%eax       \n"
-         "mov %%eax, (%[start])       \n"
-         "add $4, %[start]            \n"
-         
-         "inc %%edx                \n"
-         "cmp %[count], %%edx     \n"
-         "jne 2b                     \n"  // loop_x4
+        "xor %%edx, %%edx         \n"
+        "2:                       \n"  // loop_x4
 
-         "add %[line], %[start]      \n"
-         "add %[line_full], %[tex] \n"
-         
-         "dec %%ecx                \n"
-         "jnz 1b                   \n"  // loop_y4
-         : [S] "=&S" (fake_esi), [a]"=&a"(fake_eax), [start]"+D"(start), [tex] "+r" (tex), "+c"(height)
-         : [mask_mask] "g" (mask_mask), [count] "g" (count), [line] "g" ((intptr_t)line), [line_full] "g" ((intptr_t)line_full)
-         : "memory", "cc", "edx"
-         );
+        "mov %[tex], %[S]       \n"
+        "mov %%edx, %%eax         \n"
+        "and %[mask_mask], %%eax \n"
+        "shl $2, %%eax            \n"
+        "add %[a], %[S]         \n"
+        "mov (%[S]), %%eax       \n"
+        "mov %%eax, (%[start])       \n"
+        "add $4, %[start]            \n"
+
+        "inc %%edx                \n"
+        "cmp %[count], %%edx     \n"
+        "jne 2b                     \n"  // loop_x4
+
+        "add %[line], %[start]      \n"
+        "add %[line_full], %[tex] \n"
+
+        "dec %%ecx                \n"
+        "jnz 1b                   \n"  // loop_y4
+        : [S] "=&S" (fake_esi), [a]"=&a"(fake_eax), [start]"+D"(start), [tex] "+r" (tex), "+c"(height)
+        : [mask_mask] "g" (mask_mask), [count] "g" (count), [line] "g" ((intptr_t)line), [line_full] "g" ((intptr_t)line_full)
+        : "memory", "cc", "edx"
+    );
 #endif
 }
 
@@ -291,17 +293,18 @@ void Clamp8bS (unsigned char * tex, DWORD width, DWORD clamp_to, DWORD real_widt
     int line_full = real_width;
     int line = width;
 #if !defined(__GNUC__) && !defined(NO_ASM)
-    __asm {
+    __asm
+    {
         mov esi,dword ptr [constant]
         mov edi,dword ptr [dest]
 
         mov ecx,real_height
-y_loop:
+        y_loop:
 
         mov al,byte ptr [esi]
 
         mov edx,dword ptr [count]
-x_loop:
+        x_loop:
 
         mov byte ptr [edi],al       // don't unroll or make dword, it may go into next line (doesn't have to be multiple of two)
         inc edi
@@ -316,30 +319,30 @@ x_loop:
         jnz y_loop
     }
 #elif !defined(NO_ASM)
-   //printf("clamp8bs\n");
-   asm volatile (
-         "0: \n"
-         
-         "mov (%[constant]), %%al        \n"
+    //printf("clamp8bs\n");
+    asm volatile (
+        "0: \n"
 
-         "mov %[count], %%edx     \n"
-         "1: \n"
-         
-         "mov %%al, (%[dest])        \n"        // don't unroll or make dword, it may go into next line (doesn't have to be multiple of two)
-         "inc %[dest]                \n"
-         
-         "dec %%edx                \n"
-         "jnz 1b \n"
-         
-         "add %[line_full], %[constant] \n"
-         "add %[line], %[dest]      \n"
-         
-         "dec %%ecx                \n"
-         "jnz 0b \n"
-         : [constant]"+S"(constant), [dest]"+D"(dest), "+c"(real_height)
-         : [count] "g" (count), [line] "g" ((uintptr_t)line), [line_full] "g" ((intptr_t)line_full)
-         : "memory", "cc", "eax", "edx"
-         );
+        "mov (%[constant]), %%al        \n"
+
+        "mov %[count], %%edx     \n"
+        "1: \n"
+
+        "mov %%al, (%[dest])        \n"        // don't unroll or make dword, it may go into next line (doesn't have to be multiple of two)
+        "inc %[dest]                \n"
+
+        "dec %%edx                \n"
+        "jnz 1b \n"
+
+        "add %[line_full], %[constant] \n"
+        "add %[line], %[dest]      \n"
+
+        "dec %%ecx                \n"
+        "jnz 0b \n"
+        : [constant]"+S"(constant), [dest]"+D"(dest), "+c"(real_height)
+        : [count] "g" (count), [line] "g" ((uintptr_t)line), [line_full] "g" ((intptr_t)line_full)
+        : "memory", "cc", "eax", "edx"
+    );
 #endif
 }
 

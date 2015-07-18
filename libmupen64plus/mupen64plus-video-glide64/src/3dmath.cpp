@@ -15,7 +15,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -53,7 +53,7 @@ void calc_light (VERTEX *v)
     {
         light_intensity = DotProduct (rdp.light_vector[l], v->vec);
 
-        if (light_intensity > 0.0f) 
+        if (light_intensity > 0.0f)
         {
             color[0] += rdp.light[l].r * light_intensity;
             color[1] += rdp.light[l].g * light_intensity;
@@ -81,20 +81,20 @@ __inline void TransformVector (float *src, float *dst, float mat[4][4])
 void calc_linear (VERTEX *v)
 {
     float vec[3];
-    
+
     TransformVector (v->vec, vec, rdp.model);
 //  TransformVector (v->vec, vec, rdp.combined);
     NormalizeVector (vec);
     float x, y;
     if (!rdp.use_lookat)
     {
-    x = vec[0];
-    y = vec[1];
+        x = vec[0];
+        y = vec[1];
     }
     else
     {
-    x = DotProduct (rdp.lookat[0], vec);
-    y = DotProduct (rdp.lookat[1], vec);
+        x = DotProduct (rdp.lookat[0], vec);
+        y = DotProduct (rdp.lookat[1], vec);
     }
     if (rdp.cur_cache[0])
     {
@@ -124,42 +124,42 @@ void calc_linear (VERTEX *v)
 
 void calc_sphere (VERTEX *v)
 {
-  //RDP("calc_sphere\n");
-  float vec[3];
-  int s_scale, t_scale;
-  if (settings.chopper)
-  {
-    s_scale = min(rdp.tiles[rdp.cur_tile].org_s_scale >> 6, rdp.tiles[rdp.cur_tile].lr_s);
-    t_scale = min(rdp.tiles[rdp.cur_tile].org_t_scale >> 6, rdp.tiles[rdp.cur_tile].lr_t);
-  }
-  else
-  {
-    s_scale = rdp.tiles[rdp.cur_tile].org_s_scale >> 6;
-    t_scale = rdp.tiles[rdp.cur_tile].org_t_scale >> 6;
-  }
-  TransformVector (v->vec, vec, rdp.model);
-  //    TransformVector (v->vec, vec, rdp.combined);
-  NormalizeVector (vec);
-  float x = DotProduct (rdp.lookat[0], vec);
-  float y = DotProduct (rdp.lookat[1], vec);
-  v->ou = (x * 0.5f + 0.5f) * s_scale;
-  v->ov = (y * 0.5f + 0.5f) * t_scale;
+    //RDP("calc_sphere\n");
+    float vec[3];
+    int s_scale, t_scale;
+    if (settings.chopper)
+    {
+        s_scale = min(rdp.tiles[rdp.cur_tile].org_s_scale >> 6, rdp.tiles[rdp.cur_tile].lr_s);
+        t_scale = min(rdp.tiles[rdp.cur_tile].org_t_scale >> 6, rdp.tiles[rdp.cur_tile].lr_t);
+    }
+    else
+    {
+        s_scale = rdp.tiles[rdp.cur_tile].org_s_scale >> 6;
+        t_scale = rdp.tiles[rdp.cur_tile].org_t_scale >> 6;
+    }
+    TransformVector (v->vec, vec, rdp.model);
+    //    TransformVector (v->vec, vec, rdp.combined);
+    NormalizeVector (vec);
+    float x = DotProduct (rdp.lookat[0], vec);
+    float y = DotProduct (rdp.lookat[1], vec);
+    v->ou = (x * 0.5f + 0.5f) * s_scale;
+    v->ov = (y * 0.5f + 0.5f) * t_scale;
 }
 
 void __stdcall MulMatricesNOSSE(float m1[4][4],float m2[4][4],float r[4][4])
 {
 
-  /*for (int i=0; i<4; i++)
-  {
-    for (int j=0; j<4; j++)
+    /*for (int i=0; i<4; i++)
     {
-        r[i][j] =
-        m1[i][0] * m2[0][j] +
-        m1[i][1] * m2[1][j] +
-        m1[i][2] * m2[2][j] +
-        m1[i][3] * m2[3][j];
-    }
-  }*/
+      for (int j=0; j<4; j++)
+      {
+          r[i][j] =
+          m1[i][0] * m2[0][j] +
+          m1[i][1] * m2[1][j] +
+          m1[i][2] * m2[2][j] +
+          m1[i][3] * m2[3][j];
+      }
+    }*/
     r[0][0]  = m1[0][0]*m2[0][0] + m1[0][1]*m2[1][0] + m1[0][2]*m2[2][0] + m1[0][3]*m2[3][0];
     r[0][1]  = m1[0][0]*m2[0][1] + m1[0][1]*m2[1][1] + m1[0][2]*m2[2][1] + m1[0][3]*m2[3][1];
     r[0][2]  = m1[0][0]*m2[0][2] + m1[0][1]*m2[1][2] + m1[0][2]*m2[2][2] + m1[0][3]*m2[3][2];
@@ -193,35 +193,35 @@ void __stdcall MulMatricesSSE(float m1[4][4],float m2[4][4],float r[4][4])
 
     for (int i = 0; i < 4; ++i)
     {
-    v4sf leftrow = __builtin_ia32_loadups(m1[i]);
-    
-    // Fill tmp with four copies of leftrow[0]
-    v4sf tmp = leftrow;
-    tmp = _mm_shuffle_ps (tmp, tmp, 0);
-    // Calculate the four first summands
-    v4sf destrow = tmp * row0;
-    
-    // Fill tmp with four copies of leftrow[1]
-    tmp = leftrow;
-    tmp = _mm_shuffle_ps (tmp, tmp, 1 + (1 << 2) + (1 << 4) + (1 << 6));
-    destrow += tmp * row1;
-    
-    // Fill tmp with four copies of leftrow[2]
-    tmp = leftrow;
-    tmp = _mm_shuffle_ps (tmp, tmp, 2 + (2 << 2) + (2 << 4) + (2 << 6));
-    destrow += tmp * row2;
-    
-    // Fill tmp with four copies of leftrow[3]
-    tmp = leftrow;
-    tmp = _mm_shuffle_ps (tmp, tmp, 3 + (3 << 2) + (3 << 4) + (3 << 6));
-    destrow += tmp * row3;
-    
-    __builtin_ia32_storeups(r[i], destrow);
+        v4sf leftrow = __builtin_ia32_loadups(m1[i]);
+
+        // Fill tmp with four copies of leftrow[0]
+        v4sf tmp = leftrow;
+        tmp = _mm_shuffle_ps (tmp, tmp, 0);
+        // Calculate the four first summands
+        v4sf destrow = tmp * row0;
+
+        // Fill tmp with four copies of leftrow[1]
+        tmp = leftrow;
+        tmp = _mm_shuffle_ps (tmp, tmp, 1 + (1 << 2) + (1 << 4) + (1 << 6));
+        destrow += tmp * row1;
+
+        // Fill tmp with four copies of leftrow[2]
+        tmp = leftrow;
+        tmp = _mm_shuffle_ps (tmp, tmp, 2 + (2 << 2) + (2 << 4) + (2 << 6));
+        destrow += tmp * row2;
+
+        // Fill tmp with four copies of leftrow[3]
+        tmp = leftrow;
+        tmp = _mm_shuffle_ps (tmp, tmp, 3 + (3 << 2) + (3 << 4) + (3 << 6));
+        destrow += tmp * row3;
+
+        __builtin_ia32_storeups(r[i], destrow);
     }
 #elif !defined(NO_ASM)
     __asm
     {
-        mov     eax, dword ptr [r]  
+        mov     eax, dword ptr [r]
         mov     ecx, dword ptr [m1]
         mov     edx, dword ptr [m2]
 
@@ -330,16 +330,16 @@ MULMATRIX MulMatrices = MulMatricesNOSSE;
 
 void math_init()
 {
-  BOOL IsSSE = FALSE;
+    BOOL IsSSE = FALSE;
 #if defined(__GNUC__) && !defined(NO_ASM)
     int edx, eax;
-  #if defined(__x86_64__)
+#if defined(__x86_64__)
     asm volatile(" cpuid;        "
                  : "=a"(eax), "=d"(edx)
                  : "0"(1)
                  : "rbx", "rcx"
-                 );
-  #else
+                );
+#else
     asm volatile(" push %%ebx;   "
                  " push %%ecx;   "
                  " cpuid;        "
@@ -348,47 +348,47 @@ void math_init()
                  : "=a"(eax), "=d"(edx)
                  : "0"(1)
                  :
-                 );
-  #endif
+                );
+#endif
     // Check for SSE
     if (edx & (1 << 25))
-    IsSSE = TRUE;
-#elif !defined(NO_ASM)
-  DWORD dwEdx;
-  __try
-  {
-    __asm 
-    {
-      mov  eax,1
-      cpuid
-      mov dwEdx,edx
-    }  
-  }
-  __except(EXCEPTION_EXECUTE_HANDLER)
-  {
-    return;
-  }
-
-  if (dwEdx & (1<<25)) 
-  {
-    if (dwEdx & (1<<24))
-    {      
-      __try
-      {
-        __asm xorps xmm0, xmm0
         IsSSE = TRUE;
-      }
-      __except(EXCEPTION_EXECUTE_HANDLER)
-      {
-        return;
-      }
+#elif !defined(NO_ASM)
+    DWORD dwEdx;
+    __try
+    {
+        __asm
+        {
+            mov  eax,1
+            cpuid
+            mov dwEdx,edx
+        }
     }
-  }
+    __except(EXCEPTION_EXECUTE_HANDLER)
+    {
+        return;
+    }
+
+    if (dwEdx & (1<<25))
+    {
+        if (dwEdx & (1<<24))
+        {
+            __try
+            {
+                __asm xorps xmm0, xmm0
+                IsSSE = TRUE;
+            }
+            __except(EXCEPTION_EXECUTE_HANDLER)
+            {
+                return;
+            }
+        }
+    }
 #endif // _WIN32
-  if (IsSSE)
-  {
-    MulMatrices = MulMatricesSSE;
-    WriteLog(M64MSG_INFO, "SSE detected.\n");
-  }
+    if (IsSSE)
+    {
+        MulMatrices = MulMatricesSSE;
+        WriteLog(M64MSG_INFO, "SSE detected.\n");
+    }
 }
 

@@ -44,7 +44,7 @@ void WriteLog(m64p_msg_level level, const char *msg, ...);
 //so we don't have to change function signatures
 union PackedScreenResolution
 {
-    struct 
+    struct
     {
         int width : 16;
         int height : 15;

@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   License along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -62,9 +62,9 @@ static void mod_tex_inter_color_using_factor_CI (DWORD color, DWORD factor)
         g = (BYTE)(min(255, percent_i * g + percent * cg));
         b = (BYTE)(min(255, percent_i * b + percent * cb));
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -96,9 +96,9 @@ static void mod_tex_inter_col_using_col1_CI (DWORD color0, DWORD color1)
         g = (BYTE)(min(255, percent_g_i * g + percent_g * cg));
         b = (BYTE)(min(255, percent_b_i * b + percent_b * cb));
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -125,9 +125,9 @@ static void mod_full_color_sub_tex_CI (DWORD color)
         g = max(0, cg - g);
         b = max(0, cb - b);
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -156,9 +156,9 @@ static void mod_col_inter_col1_using_tex_CI (DWORD color0, DWORD color1)
         g = (BYTE)(min((1.0f-percent_g) * cg0 + percent_g * cg1, 255));
         b = (BYTE)(min((1.0f-percent_b) * cb0 + percent_b * cb1, 255));
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -192,9 +192,9 @@ static void mod_tex_sub_col_mul_fac_add_tex_CI (DWORD color, DWORD factor)
         if (b > 255.0f) g = 255.0f;
         if (b < 0.0f) b = 0.0f;
         rdp.pal_8[i] = (WORD)(((WORD)((BYTE)(r) >> 3) << 11) |
-                  ((WORD)((BYTE)(g) >> 3) << 6) |
-                  ((WORD)((BYTE)(b) >> 3) << 1) |
-                  (WORD)(a) );
+                              ((WORD)((BYTE)(g) >> 3) << 6) |
+                              ((WORD)((BYTE)(b) >> 3) << 1) |
+                              (WORD)(a) );
     }
 }
 
@@ -219,9 +219,9 @@ static void mod_tex_scale_col_add_col_CI (DWORD color, DWORD factor)
         g = (BYTE)(min(base + percent_g * g, 255));
         b = (BYTE)(min(base + percent_b * b, 255));
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  (WORD)(a) );
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              (WORD)(a) );
     }
 }
 
@@ -247,9 +247,9 @@ static void mod_tex_add_col_CI (DWORD color)
         g = min(cg + g, 255);
         b = min(cb + b, 255);
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -274,9 +274,9 @@ static void mod_tex_sub_col_CI (DWORD color)
         g = max(g - cg, 0);
         b = max(b - cb, 0);
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -310,9 +310,9 @@ static void mod_tex_sub_col_mul_fac_CI (DWORD color, DWORD factor)
         if (b < 0.0f) b = 0.0f;
 
         rdp.pal_8[i] = (WORD)(((WORD)((BYTE)(r) >> 3) << 11) |
-                  ((WORD)((BYTE)(g) >> 3) << 6) |
-                  ((WORD)((BYTE)(b) >> 3) << 1) |
-                  (WORD)(a) );
+                              ((WORD)((BYTE)(g) >> 3) << 6) |
+                              ((WORD)((BYTE)(b) >> 3) << 1) |
+                              (WORD)(a) );
     }
 }
 
@@ -344,9 +344,9 @@ static void mod_col_inter_tex_using_col1_CI (DWORD color0, DWORD color1)
         g = (BYTE)(min(255, percent_g * g + percent_g_i * cg));
         b = (BYTE)(min(255, percent_b * b + percent_b_i * cb));
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
@@ -363,7 +363,7 @@ static void mod_tex_inter_col_using_texa_CI (DWORD color)
     for (int i=0; i<256; i++)
     {
         if (rdp.pal_8[i]&1)
-          rdp.pal_8[i] = col16;
+            rdp.pal_8[i] = col16;
     }
 }
 
@@ -385,54 +385,54 @@ static void mod_tex_mul_col_CI (DWORD color)
         g = (BYTE)((float)((col&0x07C0) >> 6) * cg);
         b = (BYTE)((float)((col&0x003E) >> 1) * cb);
         rdp.pal_8[i] = (WORD)(((WORD)(r >> 3) << 11) |
-                  ((WORD)(g >> 3) << 6) |
-                  ((WORD)(b >> 3) << 1) |
-                  ((WORD)(a ) << 0));
+                              ((WORD)(g >> 3) << 6) |
+                              ((WORD)(b >> 3) << 1) |
+                              ((WORD)(a ) << 0));
     }
 }
 
 static void ModifyPalette(DWORD mod, DWORD modcolor, DWORD modcolor1, DWORD modfactor)
 {
-        switch (mod)
-        {
-        case TMOD_TEX_INTER_COLOR_USING_FACTOR:
-            mod_tex_inter_color_using_factor_CI (modcolor, modfactor);
-            break;
-        case TMOD_TEX_INTER_COL_USING_COL1:
-            mod_tex_inter_col_using_col1_CI (modcolor, modcolor1);
-            break;
-        case TMOD_FULL_COLOR_SUB_TEX:
-            mod_full_color_sub_tex_CI (modcolor);
-            break;
-        case TMOD_COL_INTER_COL1_USING_TEX:
-            mod_col_inter_col1_using_tex_CI (modcolor, modcolor1);
-            break;
-        case TMOD_TEX_SUB_COL_MUL_FAC_ADD_TEX:
-            mod_tex_sub_col_mul_fac_add_tex_CI (modcolor, modfactor);
-            break;
-        case TMOD_TEX_SCALE_COL_ADD_COL:
-            mod_tex_scale_col_add_col_CI (modcolor, modfactor);
-            break;
-        case TMOD_TEX_ADD_COL:
-            mod_tex_add_col_CI (modcolor);
-            break;
-        case TMOD_TEX_SUB_COL:
-            mod_tex_sub_col_CI (modcolor);
-            break;
-        case TMOD_TEX_SUB_COL_MUL_FAC:
-            mod_tex_sub_col_mul_fac_CI (modcolor, modfactor);
-            break;
-        case TMOD_COL_INTER_TEX_USING_COL1:
-            mod_col_inter_tex_using_col1_CI (modcolor, modcolor1);
-            break;
-        case TMOD_TEX_INTER_COL_USING_TEXA:
-            mod_tex_inter_col_using_texa_CI (modcolor);
-            break;
-        case TMOD_TEX_MUL_COL:
-            mod_tex_mul_col_CI (modcolor);
-            break;
-        default:
-            ;
-       }
+    switch (mod)
+    {
+    case TMOD_TEX_INTER_COLOR_USING_FACTOR:
+        mod_tex_inter_color_using_factor_CI (modcolor, modfactor);
+        break;
+    case TMOD_TEX_INTER_COL_USING_COL1:
+        mod_tex_inter_col_using_col1_CI (modcolor, modcolor1);
+        break;
+    case TMOD_FULL_COLOR_SUB_TEX:
+        mod_full_color_sub_tex_CI (modcolor);
+        break;
+    case TMOD_COL_INTER_COL1_USING_TEX:
+        mod_col_inter_col1_using_tex_CI (modcolor, modcolor1);
+        break;
+    case TMOD_TEX_SUB_COL_MUL_FAC_ADD_TEX:
+        mod_tex_sub_col_mul_fac_add_tex_CI (modcolor, modfactor);
+        break;
+    case TMOD_TEX_SCALE_COL_ADD_COL:
+        mod_tex_scale_col_add_col_CI (modcolor, modfactor);
+        break;
+    case TMOD_TEX_ADD_COL:
+        mod_tex_add_col_CI (modcolor);
+        break;
+    case TMOD_TEX_SUB_COL:
+        mod_tex_sub_col_CI (modcolor);
+        break;
+    case TMOD_TEX_SUB_COL_MUL_FAC:
+        mod_tex_sub_col_mul_fac_CI (modcolor, modfactor);
+        break;
+    case TMOD_COL_INTER_TEX_USING_COL1:
+        mod_col_inter_tex_using_col1_CI (modcolor, modcolor1);
+        break;
+    case TMOD_TEX_INTER_COL_USING_TEXA:
+        mod_tex_inter_col_using_texa_CI (modcolor);
+        break;
+    case TMOD_TEX_MUL_COL:
+        mod_tex_mul_col_CI (modcolor);
+        break;
+    default:
+        ;
+    }
 }
 

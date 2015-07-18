@@ -77,7 +77,7 @@ void MemPtrs::reset(const unsigned rombanks, const unsigned rambanks, const unsi
 		}
 
 		//	Assign that pointer so we can use it
-		m_lpSize= MapViewOfFile(m_hMapFileSize, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(int));
+		m_lpSize = MapViewOfFile(m_hMapFileSize, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(int));
 
 		if (m_lpSize == NULL)
 		{

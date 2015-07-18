@@ -15,7 +15,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -49,20 +49,20 @@ WORD * zLUT = 0;
 void ZLUT_init()
 {
     if (zLUT)
-      return;
+        return;
     zLUT = new WORD[0x40000];
     for(int i=0; i<0x40000; i++)
     {
-         DWORD exponent = 0;
-         DWORD testbit = 1 << 17;
-         while((i & testbit) && (exponent < 7))
-           {
-          exponent++;
-          testbit = 1 << (17 - exponent);
-           }
-         
-         DWORD mantissa = (i >> (6 - (6 < exponent ? 6 : exponent))) & 0x7ff;
-         zLUT[i] = (WORD)(((exponent << 11) | mantissa) << 2);
+        DWORD exponent = 0;
+        DWORD testbit = 1 << 17;
+        while((i & testbit) && (exponent < 7))
+        {
+            exponent++;
+            testbit = 1 << (17 - exponent);
+        }
+
+        DWORD mantissa = (i >> (6 - (6 < exponent ? 6 : exponent))) & 0x7ff;
+        zLUT[i] = (WORD)(((exponent << 11) | mantissa) << 2);
     }
     /*
     for(i=0; i<0x40000; i++)
@@ -86,8 +86,8 @@ void ZLUT_init()
 
 void ZLUT_release()
 {
-  delete[] zLUT;
-  zLUT = 0;
+    delete[] zLUT;
+    zLUT = 0;
 }
 
 static vertexi * max_vtx;                   // Max y vertex (ending vertex)
@@ -127,20 +127,21 @@ __inline int idiv16(int x, int y)        // (x << 16) / y
 {
     //x = (((long long)x) << 16) / ((long long)y);
 #if !defined(__GNUC__) && !defined(NO_ASM)
-  __asm {
+    __asm
+    {
         mov   eax, x
         mov   ebx, y
-        mov   edx,eax   
+        mov   edx,eax
         sar   edx,16
-        shl   eax,16    
-        idiv  ebx  
+        shl   eax,16
+        idiv  ebx
         mov   x, eax
     }
 #elif !defined(NO_ASM)
     int reminder;
     asm ("idivl %[divisor]"
-          : "=a" (x), "=d" (reminder)
-          : [divisor] "g" (y), "d" (x >> 16), "a" (x << 16));
+         : "=a" (x), "=d" (reminder)
+         : [divisor] "g" (y), "d" (x >> 16), "a" (x << 16));
 #endif
     return x;
 }
@@ -151,12 +152,12 @@ static void RightSection(void)
     // Walk backwards trough the vertex array
 
     vertexi * v2, * v1 = right_vtx;
-    if(right_vtx > start_vtx) v2 = right_vtx-1;     
+    if(right_vtx > start_vtx) v2 = right_vtx-1;
     else                      v2 = end_vtx;         // Wrap to end of array
     right_vtx = v2;
 
     // v1 = top vertex
-    // v2 = bottom vertex 
+    // v2 = bottom vertex
 
     // Calculate number of scanlines in this section
 
@@ -165,19 +166,21 @@ static void RightSection(void)
 
     // Guard against possible div overflows
 
-    if(right_height > 1) {
+    if(right_height > 1)
+    {
         // OK, no worries, we have a section that is at least
         // one pixel high. Calculate slope as usual.
 
         int height = v2->y - v1->y;
         right_dxdy  = idiv16(v2->x - v1->x, height);
     }
-    else {
+    else
+    {
         // Height is less or equal to one pixel.
         // Calculate slope = width * 1/height
         // using 18:14 bit precision to avoid overflows.
 
-        int inv_height = (0x10000 << 14) / (v2->y - v1->y);  
+        int inv_height = (0x10000 << 14) / (v2->y - v1->y);
         right_dxdy = imul14(v2->x - v1->x, inv_height);
     }
 
@@ -197,7 +200,7 @@ static void LeftSection(void)
     left_vtx = v2;
 
     // v1 = top vertex
-    // v2 = bottom vertex 
+    // v2 = bottom vertex
 
     // Calculate number of scanlines in this section
 
@@ -206,7 +209,8 @@ static void LeftSection(void)
 
     // Guard against possible div overflows
 
-    if(left_height > 1) {
+    if(left_height > 1)
+    {
         // OK, no worries, we have a section that is at least
         // one pixel high. Calculate slope as usual.
 
@@ -214,7 +218,8 @@ static void LeftSection(void)
         left_dxdy = idiv16(v2->x - v1->x, height);
         left_dzdy = idiv16(v2->z - v1->z, height);
     }
-    else {
+    else
+    {
         // Height is less or equal to one pixel.
         // Calculate slope = width * 1/height
         // using 18:14 bit precision to avoid overflows.
@@ -247,13 +252,15 @@ void Rasterize(vertexi * vtx, int vertices, int dzdx)
 
     vtx++;
 
-    for(int n=1; n<vertices; n++) {
-        if(vtx->y < min_y) {
+    for(int n=1; n<vertices; n++)
+    {
+        if(vtx->y < min_y)
+        {
             min_y = vtx->y;
             min_vtx = vtx;
         }
-        else
-        if(vtx->y > max_y) {
+        else if(vtx->y > max_y)
+        {
             max_y = vtx->y;
             max_vtx = vtx;
         }
@@ -269,17 +276,21 @@ void Rasterize(vertexi * vtx, int vertices, int dzdx)
 
     // Search for the first usable right section
 
-    do {
+    do
+    {
         if(right_vtx == max_vtx) return;
         RightSection();
-    } while(right_height <= 0);
+    }
+    while(right_height <= 0);
 
     // Search for the first usable left section
 
-    do {
+    do
+    {
         if(left_vtx == max_vtx) return;
         LeftSection();
-    } while(left_height <= 0);
+    }
+    while(left_height <= 0);
 
     WORD * destptr = (WORD*)(gfx.RDRAM+rdp.zimg);
     int y1 = iceil(min_y);
@@ -291,10 +302,11 @@ void Rasterize(vertexi * vtx, int vertices, int dzdx)
         int x1 = iceil(left_x);
         int width = iceil(right_x) - x1;
 
-        if(width > 0) {
+        if(width > 0)
+        {
 
             // Prestep initial color intensity i
-    
+
             if (y1 >= rdp.zi_lry) return;
             //if (x1+width > rdp.zi_lrx) width = rdp.zi_lrx-x1;
             int prestep = (x1 << 16) - left_x;
@@ -316,8 +328,8 @@ void Rasterize(vertexi * vtx, int vertices, int dzdx)
                 else if (trueZ > 0x3FFFF) trueZ = 0x3FFFF;
                 encodedZ = zLUT[trueZ];
                 idx = (shift+x)^1;
-                if(encodedZ < destptr[idx]) 
-                  destptr[idx] = encodedZ;
+                if(encodedZ < destptr[idx])
+                    destptr[idx] = encodedZ;
                 z += dzdx;
             }
         }
@@ -327,24 +339,31 @@ void Rasterize(vertexi * vtx, int vertices, int dzdx)
 
         // Scan the right side
 
-        if(--right_height <= 0) {               // End of this section?
-            do {
+        if(--right_height <= 0)                 // End of this section?
+        {
+            do
+            {
                 if(right_vtx == max_vtx) return;
                 RightSection();
-            } while(right_height <= 0);
+            }
+            while(right_height <= 0);
         }
-        else 
+        else
             right_x += right_dxdy;
 
         // Scan the left side
 
-        if(--left_height <= 0) {                // End of this section?
-            do {
+        if(--left_height <= 0)                  // End of this section?
+        {
+            do
+            {
                 if(left_vtx == max_vtx) return;
                 LeftSection();
-            } while(left_height <= 0);
+            }
+            while(left_height <= 0);
         }
-        else {
+        else
+        {
             left_x += left_dxdy;
             left_z += left_dzdy;
         }

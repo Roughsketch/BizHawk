@@ -15,7 +15,7 @@
 *
 * You should have received a copy of the GNU General Public
 * Licence along with this program; if not, write to the Free
-* Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+* Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * Boston, MA  02110-1301, USA
 */
 
@@ -86,7 +86,7 @@ extern DWORD frame_count; // frame counter
 #define FORCE_BL    0x00000020
 #define CULL_FRONT    0x00001000  // * must be here
 #define CULL_BACK   0x00002000  // * must be here
-#define FOG_ENABLED   0x00010000 
+#define FOG_ENABLED   0x00010000
 
 #define CULLMASK    0x00003000
 #define CULLSHIFT   12
@@ -104,7 +104,7 @@ extern DWORD frame_count; // frame counter
 #define UPDATE_VIEWPORT   0x00000080
 #define UPDATE_MULT_MAT   0x00000100
 #define UPDATE_SCISSOR    0x00000200
-#define UPDATE_FOG_ENABLED  0x00010000 
+#define UPDATE_FOG_ENABLED  0x00010000
 
 #define CMB_MULT    0x00000001
 #define CMB_SET     0x00000002
@@ -125,289 +125,296 @@ extern DWORD frame_count; // frame counter
 // Vertex structure
 typedef struct
 {
-  float x, y, z, q;
-  float u0, v0, u1, v1;
-  float coord[4];
-  float w;
-  WORD  flags;
+    float x, y, z, q;
+    float u0, v0, u1, v1;
+    float coord[4];
+    float w;
+    WORD  flags;
 
-  BYTE  b;  // These values are arranged like this so that *(DWORD*)(VERTEX+?) is
-  BYTE  g;  // ARGB format that glide can use.
-  BYTE  r;
-  BYTE  a;
+    BYTE  b;  // These values are arranged like this so that *(DWORD*)(VERTEX+?) is
+    BYTE  g;  // ARGB format that glide can use.
+    BYTE  r;
+    BYTE  a;
 
-  float f; //fog
+    float f; //fog
 
-  float vec[3]; // normal vector
+    float vec[3]; // normal vector
 
-  float sx, sy, sz;
-  float x_w, y_w, z_w, u0_w, v0_w, u1_w, v1_w, oow;
-  BYTE  not_zclipped;
-  BYTE  screen_translated;
-  BYTE  shade_mods_allowed;
-  BYTE  uv_fixed;
-  DWORD uv_calculated;  // like crc
+    float sx, sy, sz;
+    float x_w, y_w, z_w, u0_w, v0_w, u1_w, v1_w, oow;
+    BYTE  not_zclipped;
+    BYTE  screen_translated;
+    BYTE  shade_mods_allowed;
+    BYTE  uv_fixed;
+    DWORD uv_calculated;  // like crc
 
-  float ou, ov;
+    float ou, ov;
 
-  int   number;   // way to identify it
-  int   scr_off, z_off; // off the screen?
+    int   number;   // way to identify it
+    int   scr_off, z_off; // off the screen?
 } VERTEX;
 
 // Clipping (scissors)
-typedef struct {
-  DWORD ul_x;
-  DWORD ul_y;
-  DWORD lr_x;
-  DWORD lr_y;
+typedef struct
+{
+    DWORD ul_x;
+    DWORD ul_y;
+    DWORD lr_x;
+    DWORD lr_y;
 } SCISSOR;
 
-typedef struct {
-  BYTE  card_id;
+typedef struct
+{
+    BYTE  card_id;
 
-  DWORD res_x, scr_res_x;
-  DWORD res_y, scr_res_y;
-  DWORD res_data, res_data_org;
+    DWORD res_x, scr_res_x;
+    DWORD res_y, scr_res_y;
+    DWORD res_data, res_data_org;
 
-  BOOL  autodetect_ucode;
-  DWORD ucode;
+    BOOL  autodetect_ucode;
+    DWORD ucode;
 
-  BOOL  wireframe;
-  int   wfmode;
-  int   lodmode;
-  BYTE  filtering;
-  BOOL  fog;
-  BOOL  buff_clear;
+    BOOL  wireframe;
+    int   wfmode;
+    int   lodmode;
+    BYTE  filtering;
+    BOOL  fog;
+    BOOL  buff_clear;
 //  BOOL  clear_8;
-  BOOL  vsync;
-  BOOL  fast_crc;
-  BYTE  swapmode;
+    BOOL  vsync;
+    BOOL  fast_crc;
+    BYTE  swapmode;
 
-  BOOL  logging;
-  BOOL  elogging;
-  BOOL  log_clear;
-  BOOL  filter_cache;
+    BOOL  logging;
+    BOOL  elogging;
+    BOOL  log_clear;
+    BOOL  filter_cache;
 
-  BOOL  unk_as_red;
-  BOOL  log_unk;
-  BOOL  unk_clear;
+    BOOL  unk_as_red;
+    BOOL  log_unk;
+    BOOL  unk_clear;
 
-  BYTE  show_fps;
+    BYTE  show_fps;
 
-  BOOL  clock;
-  BOOL  clock_24_hr;
-   
-  DWORD full_res;
-  DWORD tex_filter;
-  BOOL noditheredalpha;
-  BOOL noglsl;
-  BOOL FBO;
-  BOOL disable_auxbuf;
+    BOOL  clock;
+    BOOL  clock_24_hr;
 
-  //Frame buffer emulation options
-  BOOL  fb_read_always;
-  BOOL  fb_read_alpha;
-  BOOL  fb_smart;
-  BOOL  fb_motionblur;
-  BOOL  fb_hires;
-  BOOL  fb_hires_buf_clear;
-  BOOL  fb_depth_clear;
-  BOOL  fb_depth_render;
-  BOOL  fb_optimize_texrect;
-  BOOL  fb_optimize_write;
-  BOOL  fb_ignore_aux_copy;
-  BOOL  fb_ignore_previous;
-  BOOL  fb_get_info;
+    DWORD full_res;
+    DWORD tex_filter;
+    BOOL noditheredalpha;
+    BOOL noglsl;
+    BOOL FBO;
+    BOOL disable_auxbuf;
 
-  // Special fixes
-  int   offset_x, offset_y;
-  int   scale_x, scale_y;
-  BOOL  alt_tex_size;
-  BOOL  use_sts1_only;
-  BOOL  wrap_big_tex;
-  BOOL  flame_corona; //hack for zeldas flame's corona
-  int   fix_tex_coord;
-  int   depth_bias;
-  BOOL  soft_depth_compare; // use GR_CMP_LEQUAL instead of GR_CMP_LESS
-  BOOL  increase_texrect_edge; // add 1 to lower right corner coordinates of texrect
-  BOOL  decrease_fillrect_edge; // sub 1 from lower right corner coordinates of fillrect
-  int   stipple_mode;  //used for dithered alpha emulation
-  DWORD stipple_pattern; //used for dithered alpha emulation
-  BOOL  force_microcheck; //check microcode each frame, for mixed F3DEX-S2DEX games
+    //Frame buffer emulation options
+    BOOL  fb_read_always;
+    BOOL  fb_read_alpha;
+    BOOL  fb_smart;
+    BOOL  fb_motionblur;
+    BOOL  fb_hires;
+    BOOL  fb_hires_buf_clear;
+    BOOL  fb_depth_clear;
+    BOOL  fb_depth_render;
+    BOOL  fb_optimize_texrect;
+    BOOL  fb_optimize_write;
+    BOOL  fb_ignore_aux_copy;
+    BOOL  fb_ignore_previous;
+    BOOL  fb_get_info;
 
-  BOOL  custom_ini;
-  BOOL  hotkeys;
+    // Special fixes
+    int   offset_x, offset_y;
+    int   scale_x, scale_y;
+    BOOL  alt_tex_size;
+    BOOL  use_sts1_only;
+    BOOL  wrap_big_tex;
+    BOOL  flame_corona; //hack for zeldas flame's corona
+    int   fix_tex_coord;
+    int   depth_bias;
+    BOOL  soft_depth_compare; // use GR_CMP_LEQUAL instead of GR_CMP_LESS
+    BOOL  increase_texrect_edge; // add 1 to lower right corner coordinates of texrect
+    BOOL  decrease_fillrect_edge; // sub 1 from lower right corner coordinates of fillrect
+    int   stipple_mode;  //used for dithered alpha emulation
+    DWORD stipple_pattern; //used for dithered alpha emulation
+    BOOL  force_microcheck; //check microcode each frame, for mixed F3DEX-S2DEX games
 
-  //Special game hacks
-  BOOL  force_depth_compare; //NFL Quarterback Club 99 and All-Star Baseball 2000
-  BOOL  fillcolor_fix; //use first part of fillcolor in fillrects
-  BOOL  cpu_write_hack; //show images writed directly by CPU
-  BOOL  increase_primdepth;  //increase prim_depth value for texrects
+    BOOL  custom_ini;
+    BOOL  hotkeys;
 
-  BOOL  zelda;    //zeldas hacks
-  BOOL  bomberman64; //bomberman64 hacks
-  BOOL  diddy;    //diddy kong racing
-  BOOL  tonic;    //tonic trouble
-  BOOL  PPL;      //pokemon puzzle league requires many special fixes
-  BOOL  ASB;      //All-Star Baseball games
-  BOOL  doraemon2;//Doraemon 2
-  BOOL  invaders; //Space Invaders
-  BOOL  BAR;      //Beetle Adventure Racing
-  BOOL  ISS64;    //International Superstar Soccer 64
-  BOOL  RE2;      //Resident Evil 2
-  BOOL  nitro;    //WCW Nitro
-  BOOL  chopper;  //Chopper Attack
-  BOOL  yoshi;    // Yoshi Story
-  BOOL  fzero;    // F-Zero
-  BOOL  PM;       //Paper Mario
-  BOOL  TGR;      //Top Gear Rally
-  BOOL  TGR2;     //Top Gear Rally 2
-  BOOL  KI;       //Killer Instinct
-  BOOL  lego;     //LEGO Racers
+    //Special game hacks
+    BOOL  force_depth_compare; //NFL Quarterback Club 99 and All-Star Baseball 2000
+    BOOL  fillcolor_fix; //use first part of fillcolor in fillrects
+    BOOL  cpu_write_hack; //show images writed directly by CPU
+    BOOL  increase_primdepth;  //increase prim_depth value for texrects
+
+    BOOL  zelda;    //zeldas hacks
+    BOOL  bomberman64; //bomberman64 hacks
+    BOOL  diddy;    //diddy kong racing
+    BOOL  tonic;    //tonic trouble
+    BOOL  PPL;      //pokemon puzzle league requires many special fixes
+    BOOL  ASB;      //All-Star Baseball games
+    BOOL  doraemon2;//Doraemon 2
+    BOOL  invaders; //Space Invaders
+    BOOL  BAR;      //Beetle Adventure Racing
+    BOOL  ISS64;    //International Superstar Soccer 64
+    BOOL  RE2;      //Resident Evil 2
+    BOOL  nitro;    //WCW Nitro
+    BOOL  chopper;  //Chopper Attack
+    BOOL  yoshi;    // Yoshi Story
+    BOOL  fzero;    // F-Zero
+    BOOL  PM;       //Paper Mario
+    BOOL  TGR;      //Top Gear Rally
+    BOOL  TGR2;     //Top Gear Rally 2
+    BOOL  KI;       //Killer Instinct
+    BOOL  lego;     //LEGO Racers
 } SETTINGS;
 
 typedef struct
 {
-  BYTE fb_always; 
-  BYTE fb_motionblur; 
-  BYTE filtering; 
-  BYTE corona; 
+    BYTE fb_always;
+    BYTE fb_motionblur;
+    BYTE filtering;
+    BYTE corona;
 } HOTKEY_INFO;
 
 // This structure is what is passed in by rdp:settextureimage
-typedef struct {
-  BYTE format;  // format: ARGB, IA, ...
-  BYTE size;    // size: 4,8,16, or 32 bit
-  WORD width;   // used in settextureimage
-  DWORD addr;   // address in RDRAM to load the texture from
-  BOOL set_by;  // 0-loadblock 1-loadtile
+typedef struct
+{
+    BYTE format;  // format: ARGB, IA, ...
+    BYTE size;    // size: 4,8,16, or 32 bit
+    WORD width;   // used in settextureimage
+    DWORD addr;   // address in RDRAM to load the texture from
+    BOOL set_by;  // 0-loadblock 1-loadtile
 } TEXTURE_IMAGE;
 
 // This structure is a tile descriptor (as used by rdp:settile and rdp:settilesize)
 typedef struct
 {
-  // rdp:settile
-  BYTE format;  // format: ARGB, IA, ...
-  BYTE size;    // size: 4,8,16, or 32 bit
-  WORD line;    // size of one row (x axis) in 64 bit words
-  WORD t_mem;   // location in texture memory (in 64 bit words, max 512 (4MB))
-  BYTE palette; // palette # to use
-  BYTE clamp_t; // clamp or wrap (y axis)?
-  BYTE mirror_t;  // mirroring on (y axis)?
-  BYTE mask_t;  // mask to wrap around (ex: 5 would wrap around 32) (y axis)
-  BYTE shift_t; // ??? (scaling)
-  BYTE clamp_s; // clamp or wrap (x axis)?
-  BYTE mirror_s;  // mirroring on (x axis)?
-  BYTE mask_s;  // mask to wrap around (x axis)
-  BYTE shift_s; // ??? (scaling)
+    // rdp:settile
+    BYTE format;  // format: ARGB, IA, ...
+    BYTE size;    // size: 4,8,16, or 32 bit
+    WORD line;    // size of one row (x axis) in 64 bit words
+    WORD t_mem;   // location in texture memory (in 64 bit words, max 512 (4MB))
+    BYTE palette; // palette # to use
+    BYTE clamp_t; // clamp or wrap (y axis)?
+    BYTE mirror_t;  // mirroring on (y axis)?
+    BYTE mask_t;  // mask to wrap around (ex: 5 would wrap around 32) (y axis)
+    BYTE shift_t; // ??? (scaling)
+    BYTE clamp_s; // clamp or wrap (x axis)?
+    BYTE mirror_s;  // mirroring on (x axis)?
+    BYTE mask_s;  // mask to wrap around (x axis)
+    BYTE shift_s; // ??? (scaling)
 
-  DWORD hack;   // any hacks needed
+    DWORD hack;   // any hacks needed
 
-  // rdp:settilesize
-  WORD ul_s;    // upper left s coordinate
-  WORD ul_t;    // upper left t coordinate
-  WORD lr_s;    // lower right s coordinate
-  WORD lr_t;    // lower right t coordinate
+    // rdp:settilesize
+    WORD ul_s;    // upper left s coordinate
+    WORD ul_t;    // upper left t coordinate
+    WORD lr_s;    // lower right s coordinate
+    WORD lr_t;    // lower right t coordinate
 
-  float f_ul_s;
-  float f_ul_t;
+    float f_ul_s;
+    float f_ul_t;
 
-  // these are set by loadtile
-  WORD t_ul_s;    // upper left s coordinate
-  WORD t_ul_t;    // upper left t coordinate
-  WORD t_lr_s;    // lower right s coordinate
-  WORD t_lr_t;    // lower right t coordinate
+    // these are set by loadtile
+    WORD t_ul_s;    // upper left s coordinate
+    WORD t_ul_t;    // upper left t coordinate
+    WORD t_lr_s;    // lower right s coordinate
+    WORD t_lr_t;    // lower right t coordinate
 
-  DWORD width;
-  DWORD height;
+    DWORD width;
+    DWORD height;
 
-  // uc0:texture
-  BYTE on;
-  float s_scale;
-  float t_scale;
+    // uc0:texture
+    BYTE on;
+    float s_scale;
+    float t_scale;
 
-  WORD org_s_scale;
-  WORD org_t_scale;
+    WORD org_s_scale;
+    WORD org_t_scale;
 } TILE;
 
 // This structure forms the lookup table for cached textures
-typedef struct {
-  DWORD addr;     // address in RDRAM
-  DWORD crc;      // CRC check
-  DWORD palette;    // Palette #
-  DWORD width;    // width
-  DWORD height;   // height
-  DWORD format;   // format
-  DWORD size;     // size
-  DWORD last_used;  // what frame # was this texture last used (used for replacing)
+typedef struct
+{
+    DWORD addr;     // address in RDRAM
+    DWORD crc;      // CRC check
+    DWORD palette;    // Palette #
+    DWORD width;    // width
+    DWORD height;   // height
+    DWORD format;   // format
+    DWORD size;     // size
+    DWORD last_used;  // what frame # was this texture last used (used for replacing)
 
-  DWORD line;
+    DWORD line;
 
-  DWORD flags;    // clamp/wrap/mirror flags
+    DWORD flags;    // clamp/wrap/mirror flags
 
-  DWORD realwidth;  // width of actual texture
-  DWORD realheight; // height of actual texture
-  DWORD lod;
-  DWORD aspect;
+    DWORD realwidth;  // width of actual texture
+    DWORD realheight; // height of actual texture
+    DWORD lod;
+    DWORD aspect;
 
-  BOOL set_by;
-  DWORD texrecting;
+    BOOL set_by;
+    DWORD texrecting;
 
-  float scale_x;    // texture scaling
-  float scale_y;
-  float scale;    // general scale to 256
+    float scale_x;    // texture scaling
+    float scale_y;
+    float scale;    // general scale to 256
 
-  GrTexInfo t_info; // texture info (glide)
-  DWORD tmem_addr;  // addres in texture memory (glide)
+    GrTexInfo t_info; // texture info (glide)
+    DWORD tmem_addr;  // addres in texture memory (glide)
 
-  int uses;   // 1 triangle that uses this texture
+    int uses;   // 1 triangle that uses this texture
 
-  int splits;   // number of splits
-  int splitheight;
+    int splits;   // number of splits
+    int splitheight;
 
-  float c_off;  // ul center texel offset (both x and y)
-  float c_scl_x;  // scale to lower-right center-texel x
-  float c_scl_y;  // scale to lower-right center-texel y
+    float c_off;  // ul center texel offset (both x and y)
+    float c_scl_x;  // scale to lower-right center-texel x
+    float c_scl_y;  // scale to lower-right center-texel y
 
-  DWORD mod, mod_color, mod_color1, mod_color2, mod_factor;
+    DWORD mod, mod_color, mod_color1, mod_color2, mod_factor;
 
 } CACHE_LUT;
 
 // Lights
-typedef struct {
-  float r, g, b, a;       // color
-  float dir_x, dir_y, dir_z;  // direction towards the light source
-  float x, y, z, w;  // light position
-  float ca, la, qa;
-  DWORD nonblack;
-  DWORD nonzero;
+typedef struct
+{
+    float r, g, b, a;       // color
+    float dir_x, dir_y, dir_z;  // direction towards the light source
+    float x, y, z, w;  // light position
+    float ca, la, qa;
+    DWORD nonblack;
+    DWORD nonzero;
 } LIGHT;
 
-typedef enum {
-  noise_none, 
-  noise_combine, 
-  noise_texture 
+typedef enum
+{
+    noise_none,
+    noise_combine,
+    noise_texture
 } NOISE_MODE;
 
-typedef enum {
-  ci_main,      //0, main color image
-  ci_zimg,      //1, depth image
-  ci_unknown,   //2, status is unknown
-  ci_useless,   //3, status is unclear
-  ci_old_copy,  //4, auxilary color image, copy of last color image from previous frame
-  ci_copy,      //5, auxilary color image, copy of previous color image
-  ci_copy_self, //6, main color image, it's content will be used to draw into itself
-  ci_zcopy,     //7, auxilary color image, copy of depth image
-  ci_aux,       //8, auxilary color image
-  ci_aux_copy   //9, auxilary color image, partial copy of previous color image
+typedef enum
+{
+    ci_main,      //0, main color image
+    ci_zimg,      //1, depth image
+    ci_unknown,   //2, status is unknown
+    ci_useless,   //3, status is unclear
+    ci_old_copy,  //4, auxilary color image, copy of last color image from previous frame
+    ci_copy,      //5, auxilary color image, copy of previous color image
+    ci_copy_self, //6, main color image, it's content will be used to draw into itself
+    ci_zcopy,     //7, auxilary color image, copy of depth image
+    ci_aux,       //8, auxilary color image
+    ci_aux_copy   //9, auxilary color image, partial copy of previous color image
 } CI_STATUS;
 
 // Frame buffers
 typedef struct
 {
     DWORD addr;   //color image address
-    DWORD format; 
-    DWORD size;   
+    DWORD format;
+    DWORD size;
     DWORD width;
     DWORD height;
     CI_STATUS status;
@@ -418,7 +425,7 @@ typedef struct
 {
     GrChipID_t tmu;
     DWORD addr;  //address of color image
-    DWORD end_addr; 
+    DWORD end_addr;
     DWORD tex_addr; //address in video memory
     DWORD width;    //width of color image
     DWORD height;   //height of color image
@@ -434,8 +441,8 @@ typedef struct
     WORD  tile_ult; //shift from top of the texture
     DWORD v_shift; //shift from top of the texture
     DWORD u_shift; //shift from left of the texture
-    float u_scale; //used to map vertex u,v coordinates into hires texture 
-    float v_scale; //used to map vertex u,v coordinates into hires texture 
+    float u_scale; //used to map vertex u,v coordinates into hires texture
+    float v_scale; //used to map vertex u,v coordinates into hires texture
     GrTexInfo info;
 } HIRES_COLOR_IMAGE;
 
@@ -446,201 +453,201 @@ typedef struct
     DWORD end;   //end of the block in video memory
     BYTE count;  //number of allocated texture buffers
     BOOL clear_allowed; //stack of buffers can be cleared
-    HIRES_COLOR_IMAGE images[256]; 
+    HIRES_COLOR_IMAGE images[256];
 } TEXTURE_BUFFER;
 
 #define NUMTEXBUF 92
 
 typedef struct
 {
-  float vi_width;
-  float vi_height;
+    float vi_width;
+    float vi_height;
 
-  BOOL window_changed;
+    BOOL window_changed;
 
-  float offset_x, offset_y;
+    float offset_x, offset_y;
 
-  float scale_x, scale_1024, scale_x_bak;
-  float scale_y, scale_768, scale_y_bak;
+    float scale_x, scale_1024, scale_x_bak;
+    float scale_y, scale_768, scale_y_bak;
 
-  DWORD res_scale_x;
-  DWORD res_scale_y;
+    DWORD res_scale_x;
+    DWORD res_scale_y;
 
-  float view_scale[3];
-  float view_trans[3];
+    float view_scale[3];
+    float view_trans[3];
 
-  BOOL updatescreen;
+    BOOL updatescreen;
 
-  DWORD tri_n;  // triangle counter
-  DWORD debug_n;
+    DWORD tri_n;  // triangle counter
+    DWORD debug_n;
 
-  // Program counter
-  DWORD pc[10]; // DList PC stack
-  DWORD pc_i;   // current PC index in the stack
-  int dl_count; // number of instructions before returning
+    // Program counter
+    DWORD pc[10]; // DList PC stack
+    DWORD pc_i;   // current PC index in the stack
+    int dl_count; // number of instructions before returning
 
-  // Segments
-  DWORD segment[16];  // Segment pointer
+    // Segments
+    DWORD segment[16];  // Segment pointer
 
-  // Marks the end of DList execution (done in uc?:enddl)
-  int halt;
+    // Marks the end of DList execution (done in uc?:enddl)
+    int halt;
 
-  // Next command
-  DWORD cmd0;
-  DWORD cmd1;
-  DWORD cmd2;
-  DWORD cmd3;
+    // Next command
+    DWORD cmd0;
+    DWORD cmd1;
+    DWORD cmd2;
+    DWORD cmd3;
 
-  // Clipping
-  SCISSOR scissor_o;
-  SCISSOR scissor;
+    // Clipping
+    SCISSOR scissor_o;
+    SCISSOR scissor;
 
-  // Colors
-  DWORD fog_color;
-  DWORD fill_color;
-  DWORD prim_color;
-  DWORD blend_color;
-  DWORD env_color;
-  DWORD prim_lodmin, prim_lodfrac;
-  WORD prim_depth;
-  BYTE K5;
-  NOISE_MODE noise;
+    // Colors
+    DWORD fog_color;
+    DWORD fill_color;
+    DWORD prim_color;
+    DWORD blend_color;
+    DWORD env_color;
+    DWORD prim_lodmin, prim_lodfrac;
+    WORD prim_depth;
+    BYTE K5;
+    NOISE_MODE noise;
 
-  float col[4];   // color multiplier
-  float coladd[4];  // color add/subtract
-  float shade_factor;
+    float col[4];   // color multiplier
+    float coladd[4];  // color add/subtract
+    float shade_factor;
 
-  float col_2[4];
+    float col_2[4];
 
-  DWORD cmb_flags, cmb_flags_2;
+    DWORD cmb_flags, cmb_flags_2;
 
-  // othermode_l flags
-  int acmp; // 0 = none, 1 = threshold, 2 = dither
-  int zsrc; // 0 = pixel, 1 = prim
+    // othermode_l flags
+    int acmp; // 0 = none, 1 = threshold, 2 = dither
+    int zsrc; // 0 = pixel, 1 = prim
 
-  // Clipping
-  int clip;     // clipping flags
-  VERTEX vtx1[256]; // copy vertex buffer #1 (used for clipping)
-  VERTEX vtx2[256]; // copy vertex buffer #2
-  VERTEX *vtxbuf;   // current vertex buffer (reset to vtx, used to determine current
-            //   vertex buffer)
-  VERTEX *vtxbuf2;
-  int n_global;   // Used to pass the number of vertices from clip_z to clip_tri
+    // Clipping
+    int clip;     // clipping flags
+    VERTEX vtx1[256]; // copy vertex buffer #1 (used for clipping)
+    VERTEX vtx2[256]; // copy vertex buffer #2
+    VERTEX *vtxbuf;   // current vertex buffer (reset to vtx, used to determine current
+    //   vertex buffer)
+    VERTEX *vtxbuf2;
+    int n_global;   // Used to pass the number of vertices from clip_z to clip_tri
 
-  int vtx_buffer;
+    int vtx_buffer;
 
-  // Matrices
-  __declspec( align(16) ) float model[4][4];
-  __declspec( align(16) ) float proj[4][4];
-  __declspec( align(16) ) float combined[4][4];
-  __declspec( align(16) ) float dkrproj[3][4][4];
+    // Matrices
+    __declspec( align(16) ) float model[4][4];
+    __declspec( align(16) ) float proj[4][4];
+    __declspec( align(16) ) float combined[4][4];
+    __declspec( align(16) ) float dkrproj[3][4][4];
 
-  __declspec( align(16) ) float model_stack[32][4][4];  // 32 deep, will warn if overflow
-  int model_i;          // index in the model matrix stack
-  int model_stack_size;
+    __declspec( align(16) ) float model_stack[32][4][4];  // 32 deep, will warn if overflow
+    int model_i;          // index in the model matrix stack
+    int model_stack_size;
 
-  // Textures
-  TEXTURE_IMAGE timg;       // 1 for each tmem address
-  TILE tiles[8];          // 8 tile descriptors
-  BYTE tmem[4096];        // 4k tmem
-  DWORD addr[512];        // 512 addresses (used to determine address loaded from)
+    // Textures
+    TEXTURE_IMAGE timg;       // 1 for each tmem address
+    TILE tiles[8];          // 8 tile descriptors
+    BYTE tmem[4096];        // 4k tmem
+    DWORD addr[512];        // 512 addresses (used to determine address loaded from)
 
-  int     cur_tile;   // current tile
-  int     mipmap_level;
-  int     last_tile;   // last tile set
-  int     last_tile_size;   // last tile size set
+    int     cur_tile;   // current tile
+    int     mipmap_level;
+    int     last_tile;   // last tile set
+    int     last_tile_size;   // last tile size set
 
-  CACHE_LUT cache[MAX_TMU][MAX_CACHE];
-  CACHE_LUT *cur_cache[2];
-  DWORD   cur_cache_n[2];
-  int     n_cached[MAX_TMU];
-  DWORD   tmem_ptr[MAX_TMU];
+    CACHE_LUT cache[MAX_TMU][MAX_CACHE];
+    CACHE_LUT *cur_cache[2];
+    DWORD   cur_cache_n[2];
+    int     n_cached[MAX_TMU];
+    DWORD   tmem_ptr[MAX_TMU];
 
-  int     t0, t1;
-  int     best_tex; // if no 2-tmus, which texture? (0 or 1)
-  int     tex;
-  int     filter_mode;
+    int     t0, t1;
+    int     best_tex; // if no 2-tmus, which texture? (0 or 1)
+    int     tex;
+    int     filter_mode;
 
-  // Texture palette
-  WORD pal_8[256];
-  DWORD pal_8_crc[16];
-  DWORD pal_256_crc;
-  BYTE tlut_mode;
-  BOOL LOD_en;
+    // Texture palette
+    WORD pal_8[256];
+    DWORD pal_8_crc[16];
+    DWORD pal_256_crc;
+    BYTE tlut_mode;
+    BOOL LOD_en;
 
-  // Lighting
-  DWORD num_lights;
-  LIGHT light[12];
-  float light_vector[12][3];
-  float lookat[2][3];
-  BOOL  use_lookat;
+    // Lighting
+    DWORD num_lights;
+    LIGHT light[12];
+    float light_vector[12][3];
+    float lookat[2][3];
+    BOOL  use_lookat;
 
-  // Combine modes
-  DWORD cycle1, cycle2, cycle_mode;
-  BYTE c_a0, c_b0, c_c0, c_d0, c_Aa0, c_Ab0, c_Ac0, c_Ad0;
-  BYTE c_a1, c_b1, c_c1, c_d1, c_Aa1, c_Ab1, c_Ac1, c_Ad1;
+    // Combine modes
+    DWORD cycle1, cycle2, cycle_mode;
+    BYTE c_a0, c_b0, c_c0, c_d0, c_Aa0, c_Ab0, c_Ac0, c_Ad0;
+    BYTE c_a1, c_b1, c_c1, c_d1, c_Aa1, c_Ab1, c_Ac1, c_Ad1;
 
-  BYTE fbl_a0, fbl_b0, fbl_c0, fbl_d0;
-  BYTE fbl_a1, fbl_b1, fbl_c1, fbl_d1;
+    BYTE fbl_a0, fbl_b0, fbl_c0, fbl_d0;
+    BYTE fbl_a1, fbl_b1, fbl_c1, fbl_d1;
 
-  BYTE uncombined;  // which is uncombined: 0x01=color 0x02=alpha 0x03=both
+    BYTE uncombined;  // which is uncombined: 0x01=color 0x02=alpha 0x03=both
 
 //  float YUV_C0, YUV_C1, YUV_C2, YUV_C3, YUV_C4; //YUV textures conversion coefficients
-  BOOL yuv_image;
-  float yuv_ul_x, yuv_ul_y, yuv_lr_x, yuv_lr_y;
-  DWORD yuv_im_begin;
+    BOOL yuv_image;
+    float yuv_ul_x, yuv_ul_y, yuv_lr_x, yuv_lr_y;
+    DWORD yuv_im_begin;
 
-  // What needs updating
-  DWORD update;
-  DWORD flags;
+    // What needs updating
+    DWORD update;
+    DWORD flags;
 
-  BOOL first;
+    BOOL first;
 
-  // Vertices
-  VERTEX vtx[MAX_VTX];
-  int v0, vn;
+    // Vertices
+    VERTEX vtx[MAX_VTX];
+    int v0, vn;
 
-  DWORD tex_ctr;    // same as above, incremented every time textures are updated
+    DWORD tex_ctr;    // same as above, incremented every time textures are updated
 
-  BOOL allow_combine; // allow combine updating?
+    BOOL allow_combine; // allow combine updating?
 
-  BOOL s2dex_tex_loaded;
+    BOOL s2dex_tex_loaded;
 
-  // Debug stuff
-  DWORD rm; // use othermode_l instead, this just as a check for changes
-  DWORD render_mode_changed;
-  DWORD geom_mode;
+    // Debug stuff
+    DWORD rm; // use othermode_l instead, this just as a check for changes
+    DWORD render_mode_changed;
+    DWORD geom_mode;
 
-  DWORD othermode_h;
-  DWORD othermode_l;
+    DWORD othermode_h;
+    DWORD othermode_l;
 
-  // used to check if in texrect while loading texture
-  DWORD texrecting;
+    // used to check if in texrect while loading texture
+    DWORD texrecting;
 
-  //frame buffer related slots. Added by Gonetz
-  COLOR_IMAGE frame_buffers[NUMTEXBUF+2];
-  DWORD cimg, ocimg, zimg, tmpzimg, vi_org_reg;
-  COLOR_IMAGE maincimg[2];
-  DWORD last_drawn_ci_addr;
-  DWORD main_ci, main_ci_end, main_ci_bg, main_ci_last_tex_addr, zimg_end, last_bg;
-  DWORD ci_width, ci_height, ci_size, ci_end;
-  DWORD zi_width;
-  int zi_lrx, zi_lry;
-  BYTE  ci_count, num_of_ci, main_ci_index, copy_ci_index;
-  int swap_ci_index, black_ci_index;
-  DWORD ci_upper_bound, ci_lower_bound;
-  BOOL  motionblur, fb_drawn, fb_drawn_front, read_previous_ci, read_whole_frame;
-  CI_STATUS ci_status;
-  TEXTURE_BUFFER texbufs[2];
-  HIRES_COLOR_IMAGE * cur_image;  //image currently being drawn
-  HIRES_COLOR_IMAGE * hires_tex;  //image, which corresponds to currently selected texture
-  BYTE  cur_tex_buf;
-  BYTE  acc_tex_buf;
-  BOOL skip_drawing; //rendering is not required. used for frame buffer emulation
+    //frame buffer related slots. Added by Gonetz
+    COLOR_IMAGE frame_buffers[NUMTEXBUF+2];
+    DWORD cimg, ocimg, zimg, tmpzimg, vi_org_reg;
+    COLOR_IMAGE maincimg[2];
+    DWORD last_drawn_ci_addr;
+    DWORD main_ci, main_ci_end, main_ci_bg, main_ci_last_tex_addr, zimg_end, last_bg;
+    DWORD ci_width, ci_height, ci_size, ci_end;
+    DWORD zi_width;
+    int zi_lrx, zi_lry;
+    BYTE  ci_count, num_of_ci, main_ci_index, copy_ci_index;
+    int swap_ci_index, black_ci_index;
+    DWORD ci_upper_bound, ci_lower_bound;
+    BOOL  motionblur, fb_drawn, fb_drawn_front, read_previous_ci, read_whole_frame;
+    CI_STATUS ci_status;
+    TEXTURE_BUFFER texbufs[2];
+    HIRES_COLOR_IMAGE * cur_image;  //image currently being drawn
+    HIRES_COLOR_IMAGE * hires_tex;  //image, which corresponds to currently selected texture
+    BYTE  cur_tex_buf;
+    BYTE  acc_tex_buf;
+    BOOL skip_drawing; //rendering is not required. used for frame buffer emulation
 
-  //fog related slots. Added by Gonetz
-  float fog_multiplier, fog_offset;
-  BOOL fog_coord_enabled;
+    //fog related slots. Added by Gonetz
+    float fog_multiplier, fog_offset;
+    BOOL fog_coord_enabled;
 
 } RDP;
 
@@ -693,44 +700,44 @@ extern const char *CIStatus[10];
 // Convert from u0/v0/u1/v1 to the real coordinates without regard to tmu
 __inline void ConvertCoordsKeep (VERTEX *v, int n)
 {
-  for (int i=0; i<n; i++)
-  {
-    v[i].uc(0) = v[i].u0;
-    v[i].vc(0) = v[i].v0;
-    v[i].uc(1) = v[i].u1;
-    v[i].vc(1) = v[i].v1;
-  }
+    for (int i=0; i<n; i++)
+    {
+        v[i].uc(0) = v[i].u0;
+        v[i].vc(0) = v[i].v0;
+        v[i].uc(1) = v[i].u1;
+        v[i].vc(1) = v[i].v1;
+    }
 }
 
 // Convert from u0/v0/u1/v1 to the real coordinates based on the tmu they are on
 __inline void ConvertCoordsConvert (VERTEX *v, int n)
 {
 
-  if (rdp.hires_tex && rdp.tex != 3)
-  {
-    for (int i=0; i<n; i++)
+    if (rdp.hires_tex && rdp.tex != 3)
     {
-      v[i].u1 = v[i].u0;
-      v[i].v1 = v[i].v0;
+        for (int i=0; i<n; i++)
+        {
+            v[i].u1 = v[i].u0;
+            v[i].v1 = v[i].v0;
+        }
     }
-  }
 
 //  float z;
-  for (int i=0; i<n; i++)
-  {
-    v[i].uc(rdp.t0) = v[i].u0;
-    v[i].vc(rdp.t0) = v[i].v0;
-    v[i].uc(rdp.t1) = v[i].u1;
-    v[i].vc(rdp.t1) = v[i].v1;
-  }
+    for (int i=0; i<n; i++)
+    {
+        v[i].uc(rdp.t0) = v[i].u0;
+        v[i].vc(rdp.t0) = v[i].v0;
+        v[i].uc(rdp.t1) = v[i].u1;
+        v[i].vc(rdp.t1) = v[i].v1;
+    }
 }
 
 __inline void AllowShadeMods (VERTEX *v, int n)
 {
-  for (int i=0; i<n; i++)
-  {
-    v[i].shade_mods_allowed = 1;
-  }
+    for (int i=0; i<n; i++)
+    {
+        v[i].shade_mods_allowed = 1;
+    }
 }
 
 __inline float ScaleZ(float z)
@@ -740,21 +747,21 @@ __inline float ScaleZ(float z)
 //  return (z / 65535.0f) * z;
 //  if (z  < 4096.0f) return z * 0.25f;
 //  z = (z / 16384.0f) * z;
-  z *= 1.9f;
-  if (z > 65534.0f) return 65534.0f;
-  return z;
+    z *= 1.9f;
+    if (z > 65534.0f) return 65534.0f;
+    return z;
 }
 
 __inline void CalculateFog (VERTEX *v)
 {
-    if (rdp.flags & FOG_ENABLED) 
+    if (rdp.flags & FOG_ENABLED)
     {
-        v->f = min(255.0f, max(0.0f, v->z_w * rdp.fog_multiplier + rdp.fog_offset));    
+        v->f = min(255.0f, max(0.0f, v->z_w * rdp.fog_multiplier + rdp.fog_offset));
         v->a = (BYTE)v->f;
     }
     else
     {
-      v->f = 1.0f;
+        v->f = 1.0f;
     }
 }
 

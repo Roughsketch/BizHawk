@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -74,11 +74,11 @@ typedef struct TRI_INFO_t
     TEX_INFO t[2];
 
     // colors
-    DWORD fog_color; 
-    DWORD fill_color; 
-    DWORD prim_color; 
-    DWORD blend_color; 
-    DWORD env_color; 
+    DWORD fog_color;
+    DWORD fill_color;
+    DWORD prim_color;
+    DWORD blend_color;
+    DWORD env_color;
     DWORD prim_lodmin, prim_lodfrac;
 
     TRI_INFO_t  *pNext;

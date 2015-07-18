@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -69,6 +69,6 @@ void calc_sphere (VERTEX *v);
 
 void math_init();
 
-typedef void (__stdcall *MULMATRIX)(float m1[4][4],float m2[4][4],float r[4][4]); 
+typedef void (__stdcall *MULMATRIX)(float m1[4][4],float m2[4][4],float r[4][4]);
 extern MULMATRIX MulMatrices;
 

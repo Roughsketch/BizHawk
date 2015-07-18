@@ -15,7 +15,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -35,7 +35,7 @@
 //
 //****************************************************************
 //
-// CRC32 calculation functions 
+// CRC32 calculation functions
 //
 // Created by Gonetz, 2004
 //
@@ -53,36 +53,37 @@ void CRC_BuildTable();
 inline unsigned int CRC_Calculate( unsigned int crc, const void *buffer, unsigned int count )
 {
 #if !defined(__GNUC__) && !defined(NO_ASM)
-  unsigned int Crc32=crc;
-  __asm {
-            mov esi, buffer
-            mov edx, count
-            add edx, esi
-            mov ecx, crc
+    unsigned int Crc32=crc;
+    __asm
+    {
+        mov esi, buffer
+        mov edx, count
+        add edx, esi
+        mov ecx, crc
 
-loop1:
-            mov bl, byte ptr [esi]
-            movzx   eax, cl
-            inc esi
-            xor al, bl
-            shr ecx, 8
-            mov ebx, [CRCTable+eax*4]
-            xor ecx, ebx
+        loop1:
+        mov bl, byte ptr [esi]
+        movzx   eax, cl
+        inc esi
+        xor al, bl
+        shr ecx, 8
+        mov ebx, [CRCTable+eax*4]
+        xor ecx, ebx
 
-            cmp edx, esi
-            jne loop1
+        cmp edx, esi
+        jne loop1
 
-            xor Crc32, ecx
-   }
-   return Crc32;
+        xor Crc32, ecx
+    }
+    return Crc32;
 #else
     unsigned int result = crc;
     for (const char * p = (const char*)buffer; p != (const char*)buffer + count; ++p)
     {
-    unsigned char al = result;
-    al ^= *p;
-    result >>= 8;
-    result ^= CRCTable[al];
+        unsigned char al = result;
+        al ^= *p;
+        result >>= 8;
+        result ^= CRCTable[al];
     }
     result ^= crc;
     return result;

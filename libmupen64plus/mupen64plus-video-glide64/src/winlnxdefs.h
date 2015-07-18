@@ -3,7 +3,7 @@
  * Copyright (C) 2002 Dave2001
  *
  * Mupen64Plus homepage: http://code.google.com/p/mupen64plus/
- * 
+ *
  * This program is free software; you can redistribute it and/
  * or modify it under the terms of the GNU General Public Li-
  * cence as published by the Free Software Foundation; either
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public
  * Licence along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA  02110-1301, USA
  *
 **/
@@ -47,17 +47,17 @@ typedef int HWND;
 
 typedef union _LARGE_INTEGER
 {
-   struct
-     {
-    DWORD LowPart;
-    INT HighPart;
-     } s;
-   struct
-     {
-    DWORD LowPart;
-    INT HighPart;
-     } u;
-   LONGLONG QuadPart;
+    struct
+    {
+        DWORD LowPart;
+        INT HighPart;
+    } s;
+    struct
+    {
+        DWORD LowPart;
+        INT HighPart;
+    } u;
+    LONGLONG QuadPart;
 } LARGE_INTEGER, *PLARGE_INTEGER;
 
 #define HIWORD(a) ((unsigned int)(a) >> 16)

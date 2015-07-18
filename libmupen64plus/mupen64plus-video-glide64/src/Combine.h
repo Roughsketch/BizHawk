@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -67,40 +67,40 @@
 
 typedef struct
 {
-  DWORD ccolor;  // constant color to set at the end, color and alpha
-  DWORD c_fnc, c_fac, c_loc, c_oth;  // grColorCombine flags
-  DWORD a_fnc, a_fac, a_loc, a_oth;  // grAlphaCombine flags
-  DWORD tex, tmu0_func, tmu0_fac, tmu0_invert, tmu1_func, tmu1_fac, tmu1_invert;
-  DWORD tmu0_a_func, tmu0_a_fac, tmu0_a_invert, tmu1_a_func, tmu1_a_fac, tmu1_a_invert;
-  int   dc0_lodbias, dc1_lodbias;
-  BYTE  dc0_detailscale, dc1_detailscale;
-  float dc0_detailmax, dc1_detailmax;
-  float lodbias0, lodbias1;
-  DWORD abf1, abf2;
-  DWORD mod_0, modcolor_0, modcolor1_0, modcolor2_0, modfactor_0;
-  DWORD mod_1, modcolor_1, modcolor1_1, modcolor2_1, modfactor_1;
-  //combine extensions
-  DWORD c_ext_a, c_ext_a_mode, c_ext_b, c_ext_b_mode, c_ext_c, c_ext_d;
-  BOOL  c_ext_c_invert, c_ext_d_invert;
-  DWORD a_ext_a, a_ext_a_mode, a_ext_b, a_ext_b_mode, a_ext_c, a_ext_d;
-  BOOL  a_ext_c_invert, a_ext_d_invert;
-  DWORD t0c_ext_a, t0c_ext_a_mode, t0c_ext_b, t0c_ext_b_mode, t0c_ext_c, t0c_ext_d;
-  BOOL  t0c_ext_c_invert, t0c_ext_d_invert;
-  DWORD t0a_ext_a, t0a_ext_a_mode, t0a_ext_b, t0a_ext_b_mode, t0a_ext_c, t0a_ext_d;
-  BOOL  t0a_ext_c_invert, t0a_ext_d_invert;
-  DWORD t1c_ext_a, t1c_ext_a_mode, t1c_ext_b, t1c_ext_b_mode, t1c_ext_c, t1c_ext_d;
-  BOOL  t1c_ext_c_invert, t1c_ext_d_invert;
-  DWORD t1a_ext_a, t1a_ext_a_mode, t1a_ext_b, t1a_ext_b_mode, t1a_ext_c, t1a_ext_d;
-  BOOL  t1a_ext_c_invert, t1a_ext_d_invert;
-  GRCOLORCOMBINEEXT    grColorCombineExt;
-  GRCOLORCOMBINEEXT    grAlphaCombineExt;
-  GRTEXCOLORCOMBINEEXT grTexColorCombineExt;
-  GRTEXCOLORCOMBINEEXT grTexAlphaCombineExt;
-  GRCONSTANTCOLORVALUEEXT grConstantColorValueExt;
-  DWORD tex_ccolor;  
-  BOOL combine_ext;
-  BYTE cmb_ext_use;
-  BYTE tex_cmb_ext_use;
+    DWORD ccolor;  // constant color to set at the end, color and alpha
+    DWORD c_fnc, c_fac, c_loc, c_oth;  // grColorCombine flags
+    DWORD a_fnc, a_fac, a_loc, a_oth;  // grAlphaCombine flags
+    DWORD tex, tmu0_func, tmu0_fac, tmu0_invert, tmu1_func, tmu1_fac, tmu1_invert;
+    DWORD tmu0_a_func, tmu0_a_fac, tmu0_a_invert, tmu1_a_func, tmu1_a_fac, tmu1_a_invert;
+    int   dc0_lodbias, dc1_lodbias;
+    BYTE  dc0_detailscale, dc1_detailscale;
+    float dc0_detailmax, dc1_detailmax;
+    float lodbias0, lodbias1;
+    DWORD abf1, abf2;
+    DWORD mod_0, modcolor_0, modcolor1_0, modcolor2_0, modfactor_0;
+    DWORD mod_1, modcolor_1, modcolor1_1, modcolor2_1, modfactor_1;
+    //combine extensions
+    DWORD c_ext_a, c_ext_a_mode, c_ext_b, c_ext_b_mode, c_ext_c, c_ext_d;
+    BOOL  c_ext_c_invert, c_ext_d_invert;
+    DWORD a_ext_a, a_ext_a_mode, a_ext_b, a_ext_b_mode, a_ext_c, a_ext_d;
+    BOOL  a_ext_c_invert, a_ext_d_invert;
+    DWORD t0c_ext_a, t0c_ext_a_mode, t0c_ext_b, t0c_ext_b_mode, t0c_ext_c, t0c_ext_d;
+    BOOL  t0c_ext_c_invert, t0c_ext_d_invert;
+    DWORD t0a_ext_a, t0a_ext_a_mode, t0a_ext_b, t0a_ext_b_mode, t0a_ext_c, t0a_ext_d;
+    BOOL  t0a_ext_c_invert, t0a_ext_d_invert;
+    DWORD t1c_ext_a, t1c_ext_a_mode, t1c_ext_b, t1c_ext_b_mode, t1c_ext_c, t1c_ext_d;
+    BOOL  t1c_ext_c_invert, t1c_ext_d_invert;
+    DWORD t1a_ext_a, t1a_ext_a_mode, t1a_ext_b, t1a_ext_b_mode, t1a_ext_c, t1a_ext_d;
+    BOOL  t1a_ext_c_invert, t1a_ext_d_invert;
+    GRCOLORCOMBINEEXT    grColorCombineExt;
+    GRCOLORCOMBINEEXT    grAlphaCombineExt;
+    GRTEXCOLORCOMBINEEXT grTexColorCombineExt;
+    GRTEXCOLORCOMBINEEXT grTexAlphaCombineExt;
+    GRCONSTANTCOLORVALUEEXT grConstantColorValueExt;
+    DWORD tex_ccolor;
+    BOOL combine_ext;
+    BYTE cmb_ext_use;
+    BYTE tex_cmb_ext_use;
 } COMBINE;
 
 extern COMBINE cmb;

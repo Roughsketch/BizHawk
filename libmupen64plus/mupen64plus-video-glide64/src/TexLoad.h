@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -49,7 +49,8 @@ DWORD LoadNone (unsigned char * dst, unsigned char * src, int wid_64, int height
 }
 
 typedef DWORD (*texfunc)(unsigned char *, unsigned char *, int, int, int, int, int);
-texfunc load_table [4][5] = {   // [size][format]
+texfunc load_table [4][5] =     // [size][format]
+{
     { Load4bSelect, LoadNone, Load4bCI, Load4bIA,  Load4bI},
     { Load8bCI,     LoadNone, Load8bCI, Load8bIA,  Load8bI},
     { Load16bRGBA,  LoadNone, LoadNone, Load16bIA, LoadNone},

@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   Licence along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -47,8 +47,8 @@ http://www.egroups.com/group/Plugin64-Dev
 Notes:
 ------
 
-Setting the approprate bits in the MI_INTR_REG and calling CheckInterrupts which 
-are both passed to the DLL in InitiateGFX will generate an Interrupt from with in 
+Setting the approprate bits in the MI_INTR_REG and calling CheckInterrupts which
+are both passed to the DLL in InitiateGFX will generate an Interrupt from with in
 the plugin.
 
 The Setting of the RSP flags and generating an SP interrupt  should not be done in
@@ -132,10 +132,10 @@ extern "C" {
 //#define LOG_UCODE
 
 //#define ALTTAB_FIX
-    
+
 //#define EXTREME_LOGGING       // lots of logging
-                            //  note that some of these things are inserted/removed
-                            //  from within the code & may not be changed by this define.
+//  note that some of these things are inserted/removed
+//  from within the code & may not be changed by this define.
 
 //#define TLUT_LOGGING      // log every entry of the TLUT?
 // ********************************
@@ -148,29 +148,30 @@ extern "C" {
 #else
 #include <SDL.h>
 #define LOGKEY KMOD_LCTRL
-inline int GetAsyncKeyState(int key) {
-  return (SDL_GetModState() & key) != 0;
+inline int GetAsyncKeyState(int key)
+{
+    return (SDL_GetModState() & key) != 0;
 }
 #endif
 
 #define LOG_COMMANDS        // log the whole 64-bit command as (0x........, 0x........)
 
 #define CATCH_EXCEPTIONS    // catch exceptions so it doesn't freeze and will report
-                            // "The gfx plugin has caused an exception" instead.
+// "The gfx plugin has caused an exception" instead.
 
 #define FLUSH               // flush the file buffer. slower logging, but makes sure
-                            //  the command is logged before continuing (in case of
-                            //  crash or exception, the log will not be cut short)
+//  the command is logged before continuing (in case of
+//  crash or exception, the log will not be cut short)
 #ifndef _FINAL_RELEASE_
 #define RDP_LOGGING         // Allow logging (will not log unless checked, but allows the option)
-                            //  Logging functions will not be compiled if this is not present.
+//  Logging functions will not be compiled if this is not present.
 //#define RDP_ERROR_LOG
 #endif
 
 #define FPS_FRAMES  10      // Number of frames in which to make an FPS count
 
 //#define SHOW_FULL_TEXVIEWER   // shows the entire contents of the texture in the cache viewer,
-                                // usually used to debug clamping issues.
+// usually used to debug clamping issues.
 
 
 // Usually enabled
@@ -178,8 +179,8 @@ inline int GetAsyncKeyState(int key) {
 
 #ifdef ALTTAB_FIX
 extern HHOOK hhkLowLevelKybd;
-extern LRESULT CALLBACK LowLevelKeyboardProc(int nCode, 
-   WPARAM wParam, LPARAM lParam);
+extern LRESULT CALLBACK LowLevelKeyboardProc(int nCode,
+        WPARAM wParam, LPARAM lParam);
 #endif
 
 // Simulations
@@ -306,7 +307,7 @@ __inline void FRDP_E (const char *fmt, ...)
     vsprintf(out_buf, fmt, ap2);
 //  rdp_err << out_buf;
 //  rdp_err.flush();
-  fprintf(stderr, out_buf);
+    fprintf(stderr, out_buf);
     va_end(ap2);
 #endif
 }
@@ -356,14 +357,15 @@ __inline DWORD segoffset (DWORD so)
 //#define CALL                        _cdecl
 
 /***** Structures *****/
-typedef struct {
+typedef struct
+{
     WORD Version;        /* Set to 0x0103 */
     WORD Type;           /* Set to PLUGIN_TYPE_GFX */
     char Name[100];      /* Name of the DLL */
 
     /* If DLL supports memory these memory options then set them to TRUE or FALSE
        if it does not support it */
-    BOOL NormalMemory;    /* a normal BYTE array */ 
+    BOOL NormalMemory;    /* a normal BYTE array */
     BOOL MemoryBswaped;  /* a normal BYTE array where the memory has been pre
                               bswap on a dword (32 bits) boundry */
 } PLUGIN_INFO;
@@ -371,17 +373,18 @@ typedef struct {
 #if 0
 //TODO: remove
 
-typedef struct {
+typedef struct
+{
     HWND hWnd;          /* Render window */
     HWND hStatusBar;    /* if render window does not have a status bar then this is NULL */
 
     BOOL MemoryBswaped;    // If this is set to TRUE, then the memory has been pre
-                           //   bswap on a dword (32 bits) boundry 
-                           //   eg. the first 8 bytes are stored like this:
-                           //        4 3 2 1   8 7 6 5
+    //   bswap on a dword (32 bits) boundry
+    //   eg. the first 8 bytes are stored like this:
+    //        4 3 2 1   8 7 6 5
 
     BYTE * HEADER;  // This is the rom header (first 40h bytes of the rom
-                    // This will be in the same memory format as the rest of the memory.
+    // This will be in the same memory format as the rest of the memory.
     BYTE * RDRAM;
     BYTE * DMEM;
     BYTE * IMEM;
@@ -420,52 +423,52 @@ extern GFX_INFO gfx;
 extern BOOL no_dlist;
 
 typedef GrContext_t (FX_CALL *GRWINOPENEXT)( FxU32                   hWnd,
-                                             GrScreenResolution_t    resolution, 
-                                             GrScreenRefresh_t       refresh, 
-                                             GrColorFormat_t         format, 
-                                             GrOriginLocation_t      origin, 
-                                             GrPixelFormat_t         pixelformat,
-                                             int                     nColBuffers,
-                                             int                     nAuxBuffers) ; 
+        GrScreenResolution_t    resolution,
+        GrScreenRefresh_t       refresh,
+        GrColorFormat_t         format,
+        GrOriginLocation_t      origin,
+        GrPixelFormat_t         pixelformat,
+        int                     nColBuffers,
+        int                     nAuxBuffers) ;
 
-typedef void (FX_CALL *GRTEXBUFFEREXT)( GrChipID_t          tmu, 
-                                        FxU32               startAddress, 
-                                        GrLOD_t             lodmin, 
-                                        GrLOD_t             lodmax, 
-                                        GrAspectRatio_t     aspect, 
-                                        GrTextureFormat_t   fmt, 
-                                        FxU32               evenOdd) ; 
+typedef void (FX_CALL *GRTEXBUFFEREXT)( GrChipID_t          tmu,
+                                        FxU32               startAddress,
+                                        GrLOD_t             lodmin,
+                                        GrLOD_t             lodmax,
+                                        GrAspectRatio_t     aspect,
+                                        GrTextureFormat_t   fmt,
+                                        FxU32               evenOdd) ;
 
 typedef void (FX_CALL *GRAUXBUFFEREXT)( GrBuffer_t buffer ) ;
 
 typedef void (FX_CALL *GRCOLORCOMBINEEXT) (GrCCUColor_t     a,
-                                        GrCombineMode_t  a_mode,
-                                        GrCCUColor_t     b,
-                                        GrCombineMode_t  b_mode,
-                                        GrCCUColor_t     c,
-                                        FxBool           c_invert,
-                                        GrCCUColor_t     d,
-                                        FxBool           d_invert,
-                                        FxU32            shift,
-                                        FxBool           invert) ;
+        GrCombineMode_t  a_mode,
+        GrCCUColor_t     b,
+        GrCombineMode_t  b_mode,
+        GrCCUColor_t     c,
+        FxBool           c_invert,
+        GrCCUColor_t     d,
+        FxBool           d_invert,
+        FxU32            shift,
+        FxBool           invert) ;
 
 typedef void (FX_CALL *GRTEXCOLORCOMBINEEXT) (GrChipID_t       tmu,
-                                           GrTCCUColor_t    a,
-                                           GrCombineMode_t  a_mode,
-                                           GrTCCUColor_t    b,
-                                           GrCombineMode_t  b_mode,
-                                           GrTCCUColor_t    c,
-                                           FxBool           c_invert,
-                                           GrTCCUColor_t    d,
-                                           FxBool           d_invert,
-                                           FxU32            shift,
-                                           FxBool           invert);
+        GrTCCUColor_t    a,
+        GrCombineMode_t  a_mode,
+        GrTCCUColor_t    b,
+        GrCombineMode_t  b_mode,
+        GrTCCUColor_t    c,
+        FxBool           c_invert,
+        GrTCCUColor_t    d,
+        FxBool           d_invert,
+        FxU32            shift,
+        FxBool           invert);
 
 typedef void (FX_CALL *GRCONSTANTCOLORVALUEEXT)
-          (GrChipID_t       tmu,
-           GrColor_t        value);
+(GrChipID_t       tmu,
+ GrColor_t        value);
 
-typedef void (FX_CALL *GRSTIPPLE)( FxI32 mode) ; 
+typedef void (FX_CALL *GRSTIPPLE)( FxI32 mode) ;
 
 typedef void (FX_CALL *GRCONFIGWRAPPEREXT)(HINSTANCE instance, HWND hwnd);
 
@@ -480,7 +483,7 @@ typedef GrScreenResolution_t (FX_CALL *GRWRAPPERFULLSCREENRESOLUTIONEXT)();
 #define GR_FBCOPY_BUFFER_BACK 0
 #define GR_FBCOPY_BUFFER_FRONT 1
 typedef void (FX_CALL *GRFRAMEBUFFERCOPYEXT)(int x, int y, int w, int h,
-                                             int buffer_from, int buffer_to, int mode);
+        int buffer_from, int buffer_to, int mode);
 
 extern GRFRAMEBUFFERCOPYEXT grFramebufferCopyExt;
 
@@ -507,17 +510,17 @@ void WriteSettings ();
   Purpose:  This function dumps the current frame to a file
   input:    pointer to the directory to save the file to
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL CaptureScreen ( char * Directory );
 
 /******************************************************************
   Function: ChangeWindow
-  Purpose:  to change the window between fullscreen and window 
-            mode. If the window was in fullscreen this should 
+  Purpose:  to change the window between fullscreen and window
+            mode. If the window was in fullscreen this should
             change the screen to window mode and vice vesa.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ChangeWindow (void);
 
 /******************************************************************
@@ -526,7 +529,7 @@ EXPORT void CALL ChangeWindow (void);
             down allowing the dll to de-initialise.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL CloseDLL (void);
 
 /******************************************************************
@@ -535,7 +538,7 @@ EXPORT void CALL CloseDLL (void);
             to give further information about the DLL.
   input:    a handle to the window that calls this function
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL DllAbout ( HWND hParent );
 
 /******************************************************************
@@ -544,7 +547,7 @@ EXPORT void CALL DllAbout ( HWND hParent );
             to allow the user to configure the dll
   input:    a handle to the window that calls this function
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL DllConfig ( HWND hParent );
 
 /******************************************************************
@@ -553,7 +556,7 @@ EXPORT void CALL DllConfig ( HWND hParent );
             to allow the user to test the dll
   input:    a handle to the window that calls this function
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL DllTest ( HWND hParent );
 
 
@@ -566,7 +569,7 @@ EXPORT void CALL ReadScreen(void **dest, int *width, int *height);
             it is being used in the desktop.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL DrawScreen (void);
 
 /******************************************************************
@@ -576,7 +579,7 @@ EXPORT void CALL DrawScreen (void);
   input:    a pointer to a PLUGIN_INFO stucture that needs to be
             filled by the function. (see def above)
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL GetDllInfo ( PLUGIN_INFO * PluginInfo );
 
 /******************************************************************
@@ -588,12 +591,12 @@ EXPORT void CALL GetDllInfo ( PLUGIN_INFO * PluginInfo );
             above.
   Output:   TRUE on success
             FALSE on failure to initialise
-             
+
   ** note on interrupts **:
   To generate an interrupt set the appropriate bit in MI_INTR_REG
   and then call the function CheckInterrupts to tell the emulator
   that there is a waiting interrupt.
-*******************************************************************/ 
+*******************************************************************/
 EXPORT BOOL CALL InitiateGFX (GFX_INFO Gfx_Info);
 
 /******************************************************************
@@ -604,9 +607,9 @@ EXPORT BOOL CALL InitiateGFX (GFX_INFO Gfx_Info);
   input:    xpos - the x-coordinate of the upper-left corner of the
             client area of the window.
             ypos - y-coordinate of the upper-left corner of the
-            client area of the window. 
+            client area of the window.
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL MoveScreen (int xpos, int ypos);
 
 /******************************************************************
@@ -615,7 +618,7 @@ EXPORT void CALL MoveScreen (int xpos, int ypos);
             processed. (High level GFX list)
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ProcessDList(void);
 
 /******************************************************************
@@ -624,7 +627,7 @@ EXPORT void CALL ProcessDList(void);
             processed. (Low level GFX list)
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ProcessRDPList(void);
 
 /******************************************************************
@@ -632,16 +635,16 @@ EXPORT void CALL ProcessRDPList(void);
   Purpose:  This function is called when a rom is closed.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL RomClosed (void);
 
 /******************************************************************
   Function: RomOpen
-  Purpose:  This function is called when a rom is open. (from the 
+  Purpose:  This function is called when a rom is open. (from the
             emulation thread)
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL RomOpen (void);
 
 /******************************************************************
@@ -651,7 +654,7 @@ EXPORT void CALL RomOpen (void);
             them again.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ShowCFB (void);
 
 /******************************************************************
@@ -661,7 +664,7 @@ EXPORT void CALL ShowCFB (void);
             set
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL UpdateScreen (void);
 
 /******************************************************************
@@ -670,7 +673,7 @@ EXPORT void CALL UpdateScreen (void);
             ViStatus registers value has been changed.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ViStatusChanged (void);
 
 /******************************************************************
@@ -679,7 +682,7 @@ EXPORT void CALL ViStatusChanged (void);
             ViWidth registers value has been changed.
   input:    none
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL ViWidthChanged (void);
 
 
@@ -691,7 +694,7 @@ EXPORT void CALL ViWidthChanged (void);
             val         val
             size        1 = BYTE, 2 = WORD, 4 = DWORD
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL FBWrite(DWORD, DWORD);
 
 typedef struct
@@ -708,7 +711,7 @@ typedef struct
   input:    FrameBufferModifyEntry *plist
             size = size of the plist, max = 1024
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL FBWList(FrameBufferModifyEntry *plist, DWORD size);
 
 /******************************************************************
@@ -725,7 +728,7 @@ EXPORT void CALL FBWList(FrameBufferModifyEntry *plist, DWORD size);
             val         val
             size        1 = BYTE, 2 = WORD, 4 = DWORD
   output:   none
-*******************************************************************/ 
+*******************************************************************/
 EXPORT void CALL FBRead(DWORD addr);
 
 /************************************************************************

@@ -14,7 +14,7 @@
 *
 *   You should have received a copy of the GNU General Public
 *   License along with this program; if not, write to the Free
-*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor, 
+*   Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 *   Boston, MA  02110-1301, USA
 */
 
@@ -217,7 +217,7 @@ static void mod_col_inter_tex_using_tex (WORD *dst, int size, DWORD color)
         percent_b = (col & 0xF) / 15.0f;
         r = (BYTE)((1.0f-percent_r) * cr + percent_r * ((col & 0x0F00) >> 8));
         g = (BYTE)((1.0f-percent_g) * cg + percent_g * ((col & 0x00F0) >> 4));
-        b = (BYTE)((1.0f-percent_b) * cb + percent_b * (col & 0x000F));       
+        b = (BYTE)((1.0f-percent_b) * cb + percent_b * (col & 0x000F));
         *(dst++) = a | (r << 8) | (g << 4) | b;
     }
 }
@@ -248,8 +248,8 @@ static void mod_col_inter_tex_using_texa (WORD *dst, int size, DWORD color)
 }
 
 static void mod_col2_inter__col_inter_col1_using_tex__using_texa (WORD *dst, int size,
-                                                                  DWORD color0, DWORD color1,
-                                                                  DWORD color2)
+        DWORD color0, DWORD color1,
+        DWORD color2)
 {
     DWORD cr0, cg0, cb0, cr1, cg1, cb1, cr2, cg2, cb2;
     WORD col;
